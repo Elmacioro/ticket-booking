@@ -1,8 +1,8 @@
 package com.elmc.booking.adapters.outgoing.database.dao;
 
-import com.elmc.booking.domain.ports.dto.MovieScreeningDto;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.Screening;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
@@ -11,20 +11,23 @@ import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
+@Transactional
 public class ScreeningDao implements ScreeningRepository {
 
     private final ScreeningJpaRepository screeningJpaRepository;
+    private final EntityToDomainMapper entityToDomainMapper;
 
-    //TODO
     @Override
-    public List<MovieScreeningDto> getMovieScreeningsInDateRange(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
-        screeningJpaRepository.findScreeningsInDateRange(start, end);
-        return null;
+    public List<Screening> getMovieScreeningsInDateRange(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
+        return screeningJpaRepository.findScreeningsInDateRange(start, end)
+                .stream()
+                .map(entityToDomainMapper::mapToDomain)
+                .toList();
     }
-    //TODO
+
     @Override
     public Optional<Screening> findScreeningById(long screeningId) {
-        screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId);
-        return null;
+        return screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId)
+                .map(entityToDomainMapper::mapToDomain);
     }
 }

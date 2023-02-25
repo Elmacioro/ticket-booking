@@ -12,9 +12,9 @@ import java.util.Optional;
 @Repository
 public interface ScreeningJpaRepository extends JpaRepository<ScreeningEntity, Long> {
 
-    @Query("SELECT s FROM ScreeningEntity s JOIN FETCH s.reservations r JOIN FETCH r.tickets WHERE s.id = ?1")
-    Optional<ScreeningEntity> findScreeningWithReservationsAndTicketsById(long screeningId);
-
     @Query("SELECT s FROM ScreeningEntity s WHERE s.startTime BETWEEN ?1 AND ?2")
     List<ScreeningEntity> findScreeningsInDateRange(LocalDateTime start, LocalDateTime end);
+
+    @Query("SELECT s FROM ScreeningEntity s JOIN FETCH s.reservations r JOIN FETCH r.tickets WHERE s.id = ?1")
+    Optional<ScreeningEntity> findScreeningWithReservationsAndTicketsById(long screeningId);
 }

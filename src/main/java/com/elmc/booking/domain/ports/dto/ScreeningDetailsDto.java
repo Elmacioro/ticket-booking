@@ -15,16 +15,16 @@ public class ScreeningDetailsDto {
     @NonNull String roomName;
     int roomRowsNumber;
     int roomSeatsInRowNumber;
-    @NonNull List<SeatDto> freeSeats;
     @NonNull List<SeatDto> bookedSeats;
+    @NonNull List<SeatDto> freeSeats;
 
     public ScreeningDetailsDto(Screening screening) {
         Room room = screening.getRoom();
         this.roomName = room.name();
         this.roomRowsNumber = room.numberOfRows();
         this.roomSeatsInRowNumber = room.numberOfSeatsInRow();
-        this.freeSeats = screening.getFreeSeats().stream().map(SeatDto::new).toList();
         this.bookedSeats = screening.getBookedSeats().stream().map(SeatDto::new).toList();
+        this.freeSeats = screening.getFreeSeats().stream().map(SeatDto::new).toList();
     }
 
 }

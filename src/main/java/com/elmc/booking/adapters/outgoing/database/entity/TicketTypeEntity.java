@@ -8,8 +8,7 @@ import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "TICKET_TYPE")
@@ -22,7 +21,7 @@ public class TicketTypeEntity {
 
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketType")
-    private List<TicketEntity> tickets = new ArrayList<>();
+    private Set<TicketEntity> tickets;
 
     @NotNull
     @Size(min = 3, max = 25)

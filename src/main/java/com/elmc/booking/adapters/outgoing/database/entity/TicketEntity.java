@@ -28,5 +28,4 @@ public class TicketEntity {
     @Min(1)
     private int seatInRowNumber;
 
-
 }

@@ -6,8 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "SCREENING")
@@ -21,7 +20,7 @@ public class ScreeningEntity {
 
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "screening")
-    private List<ReservationEntity> reservations = new ArrayList<>();
+    private Set<ReservationEntity> reservations;
 
     @NotNull
     @ManyToOne

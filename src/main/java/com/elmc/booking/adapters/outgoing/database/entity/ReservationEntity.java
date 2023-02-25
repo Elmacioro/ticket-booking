@@ -1,15 +1,13 @@
 package com.elmc.booking.adapters.outgoing.database.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "RESERVATION")
@@ -27,7 +25,7 @@ public class ReservationEntity {
     @NotNull
     @Size(min = 1)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reservation")
-    private List<TicketEntity> tickets = new ArrayList<>();
+    private Set<TicketEntity> tickets;
 
     @NotNull
     @Size(min = 3)

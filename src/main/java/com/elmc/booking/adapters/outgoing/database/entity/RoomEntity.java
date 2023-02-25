@@ -6,8 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ROOM")
@@ -20,7 +19,7 @@ public class RoomEntity {
 
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
-    private List<ScreeningEntity> screenings = new ArrayList<>();
+    private Set<ScreeningEntity> screenings;
 
     @NotNull
     @Size(min = 1, max = 50)
