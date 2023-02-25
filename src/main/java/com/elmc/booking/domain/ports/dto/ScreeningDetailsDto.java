@@ -12,11 +12,18 @@ import java.util.List;
 @AllArgsConstructor
 public class ScreeningDetailsDto {
 
-    @NonNull String roomName;
+    @NonNull
+    String roomName;
+
     int roomRowsNumber;
+
     int roomSeatsInRowNumber;
-    @NonNull List<SeatDto> bookedSeats;
-    @NonNull List<SeatDto> freeSeats;
+
+    @NonNull
+    List<SeatDto> bookedSeats;
+
+    @NonNull
+    List<SeatDto> freeSeats;
 
     public ScreeningDetailsDto(Screening screening) {
         Room room = screening.getRoom();

@@ -13,7 +13,6 @@ public final class Seat {
     private final int seatInRowNumber;
 
     @Setter
-    @NonNull
     private SeatStatus seatStatus;
 
     public Seat(int rowNumber, int seatInRowNumber, @NonNull SeatStatus seatStatus) {

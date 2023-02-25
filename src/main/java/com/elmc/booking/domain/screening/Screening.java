@@ -15,22 +15,15 @@ public class Screening {
 
     private final long id;
 
-    @NonNull
     private final Movie movie;
 
-    @NonNull
     private final Set<Seat> seats;
 
-    @NonNull
     private final Room room;
 
-    @NonNull
     private final LocalDateTime startTime;
 
-    @NonNull
     private final LocalDateTime endTime;
-
-
 
     public Screening(long id,
                      @NonNull Movie movie,
@@ -75,7 +68,7 @@ public class Screening {
     private void validateParameters(Room room,
                                     LocalDateTime startTime,
                                     LocalDateTime endTime,
-                                    @NonNull Set<Seat> seats) {
+                                    Set<Seat> seats) {
         if (startTime.isAfter(endTime)) {
             throw new InvalidScreeningTimeIntervalException();
         }
