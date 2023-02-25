@@ -40,10 +40,10 @@ public class ScreeningManagement implements ScreeningService {
     private List<MovieScreeningDto> mapToMovieScreenings(List<Screening> screenings) {
         Map<Movie, List<ScreeningTime>> movieScreenings = getMovieScreeningsTimeMap(screenings);
         sortScreeningTimesByStartTime(movieScreenings);
-        return converMovieScreeningTimesToList(movieScreenings);
+        return convertMovieScreeningTimesToList(movieScreenings);
     }
 
-    private List<MovieScreeningDto> converMovieScreeningTimesToList(Map<Movie, List<ScreeningTime>> movieScreenings) {
+    private List<MovieScreeningDto> convertMovieScreeningTimesToList(Map<Movie, List<ScreeningTime>> movieScreenings) {
         return movieScreenings.entrySet()
                 .stream()
                 .map(entry -> new MovieScreeningDto(entry.getKey().id(),
