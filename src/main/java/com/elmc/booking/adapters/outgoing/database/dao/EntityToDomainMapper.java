@@ -2,6 +2,7 @@ package com.elmc.booking.adapters.outgoing.database.dao;
 
 import com.elmc.booking.adapters.outgoing.database.entity.*;
 import com.elmc.booking.domain.screening.*;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -10,19 +11,19 @@ import java.util.stream.Collectors;
 @Service
 public class EntityToDomainMapper {
 
-    public Movie mapToDomain(MovieEntity movieEntity) {
+    public Movie mapToDomain(@NonNull MovieEntity movieEntity) {
         return new Movie(movieEntity.getId(),
                 movieEntity.getTitle(),
                 movieEntity.getDescription());
     }
 
-    public Room mapToDomain(RoomEntity roomEntity) {
+    public Room mapToDomain(@NonNull RoomEntity roomEntity) {
         return new Room(roomEntity.getName(),
                 roomEntity.getRowsNumber(),
                 roomEntity.getSeatsInRowNumber());
     }
 
-    public Screening mapToDomain(ScreeningEntity screeningEntity) {
+    public Screening mapToDomain(@NonNull ScreeningEntity screeningEntity) {
 
         Room room = mapToDomain(screeningEntity.getRoom());
         Set<Seat> bookedSeats = getBookedSeats(screeningEntity);
