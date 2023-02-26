@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ class ScreeningManagementTest {
     void setUp() {
         Movie movie = new Movie(screeningId, "Django", "Lorem ipsum");
         Room room = new Room("Room A", 2, 2);
-        Set<Seat> seats = Set.of(new Seat(1, 1, SeatStatus.BOOKED),
+        List<Seat> seats = List.of(new Seat(1, 1, SeatStatus.BOOKED),
                 new Seat(1, 2, SeatStatus.BOOKED),
                 new Seat(2, 1, SeatStatus.FREE),
                 new Seat(2, 2, SeatStatus.FREE));

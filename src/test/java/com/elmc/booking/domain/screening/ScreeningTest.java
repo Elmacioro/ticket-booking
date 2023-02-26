@@ -6,8 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,9 +17,9 @@ class ScreeningTest {
     private final long screeningId = 1;
     private Movie movie;
     private Room room;
-    private Set<Seat> bookedSeats;
-    private Set<Seat> freeSeats;
-    private Set<Seat> allSeats;
+    private List<Seat> bookedSeats;
+    private List<Seat> freeSeats;
+    private List<Seat> allSeats;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Screening screening;
@@ -29,9 +28,9 @@ class ScreeningTest {
     void setUp() {
         movie = new Movie(1, "Django", "Lorem ipsum");
         room = new Room("Room A", 2, 2);
-        bookedSeats = Set.of(new Seat(1, 1, SeatStatus.BOOKED), new Seat(1, 2, SeatStatus.BOOKED));
-        freeSeats = Set.of(new Seat(2, 1, SeatStatus.FREE), new Seat(2, 2, SeatStatus.FREE));
-        allSeats = Stream.concat(bookedSeats.stream(), freeSeats.stream()).collect(Collectors.toSet());
+        bookedSeats = List.of(new Seat(1, 1, SeatStatus.BOOKED), new Seat(1, 2, SeatStatus.BOOKED));
+        freeSeats = List.of(new Seat(2, 1, SeatStatus.FREE), new Seat(2, 2, SeatStatus.FREE));
+        allSeats = Stream.concat(bookedSeats.stream(), freeSeats.stream()).toList();
         startTime = LocalDateTime.parse("2023-01-01T10:30:00");
         endTime = LocalDateTime.parse("2023-01-01T12:45:00");
         screening = new Screening(screeningId, movie, room, startTime, endTime, allSeats);

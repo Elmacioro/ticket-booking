@@ -27,7 +27,7 @@ public class EntityToDomainMapper {
 
         Room room = mapToDomain(screeningEntity.getRoom());
         Set<Seat> bookedSeats = getBookedSeats(screeningEntity);
-        Set<Seat> seats = getSeatsForRoom(room, bookedSeats);
+        List<Seat> seats = getSeatsForRoom(room, bookedSeats);
 
         return new Screening(screeningEntity.getId(),
                 mapToDomain(screeningEntity.getMovie()),
@@ -48,8 +48,8 @@ public class EntityToDomainMapper {
                 .collect(Collectors.toSet());
     }
 
-    private Set<Seat> getSeatsForRoom(Room room, Set<Seat> bookedSeats) {
-        Set<Seat> seats = new HashSet<>();
+    private List<Seat> getSeatsForRoom(Room room, Set<Seat> bookedSeats) {
+        List<Seat> seats = new ArrayList<>();
         for (int row = 1; row <= room.numberOfRows(); row++) {
             for (int seatInRow = 1; seatInRow <= room.numberOfSeatsInRow(); seatInRow++) {
                 Seat seat = new Seat(row, seatInRow, SeatStatus.FREE);

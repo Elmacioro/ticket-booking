@@ -7,7 +7,6 @@ import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,7 +16,7 @@ public class Screening {
 
     private final Movie movie;
 
-    private final Set<Seat> seats;
+    private final List<Seat> seats;
 
     private final Room room;
 
@@ -30,7 +29,7 @@ public class Screening {
                      @NonNull Room room,
                      @NonNull LocalDateTime startTime,
                      @NonNull LocalDateTime endTime,
-                     @NonNull Set<Seat> seats) {
+                     @NonNull List<Seat> seats) {
         validateParameters(room, startTime, endTime, seats);
         this.id = id;
         this.movie = movie;
@@ -68,7 +67,7 @@ public class Screening {
     private void validateParameters(Room room,
                                     LocalDateTime startTime,
                                     LocalDateTime endTime,
-                                    Set<Seat> seats) {
+                                    List<Seat> seats) {
         if (startTime.isAfter(endTime)) {
             throw new InvalidScreeningTimeIntervalException(startTime, endTime);
         }
