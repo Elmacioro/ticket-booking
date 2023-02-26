@@ -2,7 +2,6 @@ package com.elmc.booking.adapters.incoming.rest;
 
 import com.elmc.booking.domain.screening.exceptions.InvalidScreeningTimeIntervalException;
 import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
-import com.elmc.booking.domain.screening.exceptions.NoSuchSeatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

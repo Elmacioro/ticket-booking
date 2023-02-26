@@ -5,11 +5,13 @@ import com.elmc.booking.domain.screening.Screening;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 @AllArgsConstructor
 @Transactional
 public class ScreeningDao implements ScreeningRepository {
