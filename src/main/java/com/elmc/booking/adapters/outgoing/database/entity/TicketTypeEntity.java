@@ -5,14 +5,20 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.DecimalMin;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
 @Table(name = "TICKET_TYPE")
+@Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TicketTypeEntity {
 
     @Id

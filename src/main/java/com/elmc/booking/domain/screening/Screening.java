@@ -53,10 +53,10 @@ public class Screening {
     }
 
     public boolean isSeatFree(int rowNumber, int seatInRowNumber) {
-        return !isSeatTaken(rowNumber, seatInRowNumber);
+        return !isSeatBooked(rowNumber, seatInRowNumber);
     }
 
-    public boolean isSeatTaken(int rowNumber, int seatInRowNumber) {
+    public boolean isSeatBooked(int rowNumber, int seatInRowNumber) {
         return seats.stream()
                 .filter((seat -> seat.getRowNumber() == rowNumber && seat.getSeatInRowNumber() == seatInRowNumber))
                 .findFirst()
@@ -70,7 +70,7 @@ public class Screening {
                                     LocalDateTime endTime,
                                     Set<Seat> seats) {
         if (startTime.isAfter(endTime)) {
-            throw new InvalidScreeningTimeIntervalException();
+            throw new InvalidScreeningTimeIntervalException(startTime, endTime);
         }
         int seatsInRoom = room.numberOfRows() * room.numberOfSeatsInRow();
         if (seatsInRoom != seats.size()) {

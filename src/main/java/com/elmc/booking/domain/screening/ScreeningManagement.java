@@ -24,6 +24,7 @@ public class ScreeningManagement implements ScreeningService {
         return mapToMovieScreenings(screeningRepository.getMovieScreeningsInDateRange(start, end));
     }
 
+    //TODO test after refactoring mapping
     @Override
     public ScreeningDetailsDto getScreeningDetails(long screeningId) {
         return screeningRepository.findScreeningById(screeningId)
@@ -33,7 +34,7 @@ public class ScreeningManagement implements ScreeningService {
 
     private void validateTimeInterval(LocalDateTime start, LocalDateTime end) {
         if (start.isAfter(end)) {
-            throw new InvalidScreeningTimeIntervalException();
+            throw new InvalidScreeningTimeIntervalException(start, end);
         }
     }
 
