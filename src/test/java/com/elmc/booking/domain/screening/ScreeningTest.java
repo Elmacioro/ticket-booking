@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ScreeningTest {
@@ -22,6 +23,7 @@ class ScreeningTest {
     private Set<Seat> allSeats;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Screening screening;
 
     @BeforeEach
     void setUp() {
@@ -32,6 +34,7 @@ class ScreeningTest {
         allSeats = Stream.concat(bookedSeats.stream(), freeSeats.stream()).collect(Collectors.toSet());
         startTime = LocalDateTime.parse("2023-01-01T10:30:00");
         endTime = LocalDateTime.parse("2023-01-01T12:45:00");
+        screening = new Screening(screeningId, movie, room, startTime, endTime, allSeats);
     }
 
     @Test
@@ -53,34 +56,28 @@ class ScreeningTest {
 
     @Test
     public void isSeatBookedShouldThrowExceptionWhenSeatNotExist() {
-        Screening screening = new Screening(screeningId, movie, room, startTime, endTime, allSeats);
-
         assertThrows(NoSuchSeatException.class,
                 () -> screening.isSeatBooked(100, 100));
     }
 
     @Test
     public void isSeatBookedShouldReturnFalseWhenSeatIsFree() {
-        Screening screening = new Screening(screeningId, movie, room, startTime, endTime, allSeats);
         assertFalse(screening.isSeatBooked(2, 2));
     }
 
     @Test
     public void isSeatBookedShouldReturnTrueWhenSeatIsBooked() {
-        Screening screening = new Screening(screeningId, movie, room, startTime, endTime, allSeats);
         assertTrue(screening.isSeatBooked(1, 1));
     }
 
     @Test
     public void getBookedSeatsShouldReturnOnlyBookedSeats() {
-        Screening screening = new Screening(screeningId, movie, room, startTime, endTime, allSeats);
-        assertIterableEquals(bookedSeats, screening.getBookedSeats());
+        assertThat(bookedSeats).hasSameElementsAs(screening.getBookedSeats());
     }
 
     @Test
     public void getFreeSeatsShouldReturnOnlyFreeSeats() {
-        Screening screening = new Screening(screeningId, movie, room, startTime, endTime, allSeats);
-        assertIterableEquals(freeSeats, screening.getFreeSeats());
+        assertThat(freeSeats).hasSameElementsAs(screening.getFreeSeats());
     }
 
 }

@@ -40,7 +40,7 @@ class ScreeningManagementTest {
                 new Seat(2, 2, SeatStatus.FREE));
         LocalDateTime startTime = LocalDateTime.parse("2023-01-01T10:30:00");
         LocalDateTime endTime = LocalDateTime.parse("2023-01-01T12:45:00");
-        screening = new Screening(1, movie, room, startTime, endTime, seats);
+        screening = new Screening(screeningId, movie, room, startTime, endTime, seats);
     }
 
     @Test
