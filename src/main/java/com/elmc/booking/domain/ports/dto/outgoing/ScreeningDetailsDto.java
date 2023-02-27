@@ -1,5 +1,6 @@
-package com.elmc.booking.domain.ports.dto;
+package com.elmc.booking.domain.ports.dto.outgoing;
 
+import com.elmc.booking.domain.ports.dto.shared.SeatDto;
 import com.elmc.booking.domain.screening.Room;
 import com.elmc.booking.domain.screening.Screening;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.elmc.booking.domain.screening;
 
-import com.elmc.booking.domain.ports.dto.ScreeningDetailsDto;
+import com.elmc.booking.domain.ports.dto.outgoing.ScreeningDetailsDto;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -27,18 +26,18 @@ class ScreeningManagementTest {
     @InjectMocks
     private ScreeningManagement screeningManagement;
 
-    private final int screeningId = 1;
+    private final long screeningId = 1;
 
     private Screening screening;
 
     @BeforeEach
     void setUp() {
-        Movie movie = new Movie(screeningId, "Django", "Lorem ipsum");
+        Movie movie = new Movie(1, "Django", "Lorem ipsum");
         Room room = new Room("Room A", 2, 2);
-        List<Seat> seats = List.of(new Seat(1, 1, SeatStatus.BOOKED),
-                new Seat(1, 2, SeatStatus.BOOKED),
-                new Seat(2, 1, SeatStatus.FREE),
-                new Seat(2, 2, SeatStatus.FREE));
+        List<Seat> seats = List.of(new Seat(new SeatId(1, 1), SeatStatus.BOOKED),
+                new Seat(new SeatId(1, 2), SeatStatus.BOOKED),
+                new Seat(new SeatId(2, 1), SeatStatus.FREE),
+                new Seat(new SeatId(2, 2), SeatStatus.FREE));
         LocalDateTime startTime = LocalDateTime.parse("2023-01-01T10:30:00");
         LocalDateTime endTime = LocalDateTime.parse("2023-01-01T12:45:00");
         screening = new Screening(screeningId, movie, room, startTime, endTime, seats);

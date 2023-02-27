@@ -1,7 +1,10 @@
 package com.elmc.booking.adapters.incoming.rest;
 
-import com.elmc.booking.domain.screening.exceptions.InvalidScreeningTimeIntervalException;
-import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
+import com.elmc.booking.domain.reservation.exceptions.DifferentCurrenciesException;
+import com.elmc.booking.domain.reservation.exceptions.InvalidFirstnameException;
+import com.elmc.booking.domain.reservation.exceptions.InvalidSurnameException;
+import com.elmc.booking.domain.reservation.exceptions.NoTicketsForReservationException;
+import com.elmc.booking.domain.screening.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,7 +28,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorMessage> NoSuchScreeningExceptionHandler(NoSuchScreeningException exception) {
+    public ResponseEntity<ErrorMessage> noSuchScreeningExceptionHandler(NoSuchScreeningException exception) {
         ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
                 String.format("""
                         No screening was found for provided id:
@@ -36,9 +39,61 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorMessage> GeneralExceptionHandler(Exception exception) {
-        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), exception.getMessage());
-        return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorMessage> seatAlreadyBookedExceptionHandler(SeatAlreadyBookedException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
+                        "Provided seats have been already booked by another client");
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> singleSeatLeftOutAfterBookingExceptionHandler(SingleSeatLeftOutAfterBookingException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
+                "Cannot book provided seats as one seat would be left out between two booked seats");
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> invalidFirstnameExceptionHandler(InvalidFirstnameException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), String.format("""
+                        Invalid firstname provided. Firstname must be at least 3 characters long
+                        [firstname: %s]
+                        """,
+                exception.getFirstname()));
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> invalidSurnameExceptionHandler(InvalidSurnameException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), String.format("""
+                        Invalid surname provided. Surname must be at least 3 characters long
+                        [firstname: %s]
+                        """,
+                exception.getSurname()));
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> noTicketsForReservationExceptionHandler(NoTicketsForReservationException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
+                "Reservation must apply to at least one seat");
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> sameSeatChosenMultipleTimesExceptionHandler(SameSeatChosenMultipleTimesException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
+                "You cannot chose the same seat more than once during booking");
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> differentCurrenciesExceptionHandler(DifferentCurrenciesException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
+                String.format("""
+                        Only one currency can be used for single reservation
+                        [number of provided currencies: %d]
+                        """, exception.getNumberOfCurrencies()));
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
 }

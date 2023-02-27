@@ -19,10 +19,9 @@ import java.util.Set;
 public class MovieEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotNull
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie")
     private Set<ScreeningEntity> screenings;
 

@@ -6,26 +6,17 @@ import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
-@EqualsAndHashCode(of = {"rowNumber", "seatInRowNumber"})
+@EqualsAndHashCode(of = {"seatId"})
 public final class Seat {
 
-    private final int rowNumber;
-    private final int seatInRowNumber;
+    private final SeatId seatId;
 
     @Setter
     private SeatStatus seatStatus;
 
-    public Seat(int rowNumber, int seatInRowNumber, @NonNull SeatStatus seatStatus) {
-        validateParameters(rowNumber, seatInRowNumber);
-        this.rowNumber = rowNumber;
-        this.seatInRowNumber = seatInRowNumber;
+    public Seat(@NonNull SeatId seatId, @NonNull SeatStatus seatStatus) {
+        this.seatId = seatId;
         this.seatStatus = seatStatus;
-    }
-
-    private static void validateParameters(int rowNumber, int seatInRowNumber) {
-        if (rowNumber <= 0 || seatInRowNumber <= 0) {
-            throw new IllegalArgumentException("rowNumber and seatInRow cannot be lower than 1");
-        }
     }
 
     public boolean isSeatBooked() {

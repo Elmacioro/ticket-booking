@@ -22,10 +22,9 @@ import java.util.Set;
 public class TicketTypeEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotNull
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ticketType")
     private Set<TicketEntity> tickets;
 

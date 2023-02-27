@@ -1,8 +1,8 @@
 package com.elmc.booking.domain.screening;
 
-import com.elmc.booking.domain.ports.dto.MovieScreeningDto;
-import com.elmc.booking.domain.ports.dto.ScreeningDetailsDto;
-import com.elmc.booking.domain.ports.dto.ScreeningTime;
+import com.elmc.booking.domain.ports.dto.outgoing.MovieScreeningsDto;
+import com.elmc.booking.domain.ports.dto.outgoing.ScreeningDetailsDto;
+import com.elmc.booking.domain.ports.dto.shared.ScreeningTimeDto;
 import com.elmc.booking.domain.ports.incoming.ScreeningService;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.exceptions.InvalidScreeningTimeIntervalException;
@@ -19,12 +19,11 @@ public class ScreeningManagement implements ScreeningService {
     private final ScreeningRepository screeningRepository;
 
     @Override
-    public List<MovieScreeningDto> searchForMovieScreenings(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
+    public List<MovieScreeningsDto> searchForMovieScreenings(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
         validateTimeInterval(start, end);
         return mapToMovieScreenings(screeningRepository.getMovieScreeningsInDateRange(start, end));
     }
 
-    //TODO test after refactoring mapping
     @Override
     public ScreeningDetailsDto getScreeningDetails(long screeningId) {
         return screeningRepository.findScreeningById(screeningId)
@@ -38,34 +37,34 @@ public class ScreeningManagement implements ScreeningService {
         }
     }
 
-    private List<MovieScreeningDto> mapToMovieScreenings(List<Screening> screenings) {
-        Map<Movie, List<ScreeningTime>> movieScreenings = getMovieScreeningsTimeMap(screenings);
+    private List<MovieScreeningsDto> mapToMovieScreenings(List<Screening> screenings) {
+        Map<Movie, List<ScreeningTimeDto>> movieScreenings = getMovieScreeningsTimeMap(screenings);
         sortScreeningTimesByStartTime(movieScreenings);
         return convertMovieScreeningTimesToList(movieScreenings);
     }
 
-    private List<MovieScreeningDto> convertMovieScreeningTimesToList(Map<Movie, List<ScreeningTime>> movieScreenings) {
+    private List<MovieScreeningsDto> convertMovieScreeningTimesToList(Map<Movie, List<ScreeningTimeDto>> movieScreenings) {
         return movieScreenings.entrySet()
                 .stream()
-                .map(entry -> new MovieScreeningDto(entry.getKey().id(),
+                .map(entry -> new MovieScreeningsDto(entry.getKey().id(),
                         entry.getKey().title(),
                         entry.getValue()))
-                .sorted((Comparator.comparing(MovieScreeningDto::movieTitle)))
+                .sorted((Comparator.comparing(MovieScreeningsDto::movieTitle)))
                 .toList();
     }
 
-    private void sortScreeningTimesByStartTime(Map<Movie, List<ScreeningTime>> movieScreenings) {
-        movieScreenings.forEach((movie, screeningTimes) -> screeningTimes.sort(Comparator.comparing(ScreeningTime::start)));
+    private void sortScreeningTimesByStartTime(Map<Movie, List<ScreeningTimeDto>> movieScreenings) {
+        movieScreenings.forEach((movie, screeningTimes) -> screeningTimes.sort(Comparator.comparing(ScreeningTimeDto::start)));
     }
 
-    private Map<Movie, List<ScreeningTime>> getMovieScreeningsTimeMap(List<Screening> screenings) {
-        Map<Movie, List<ScreeningTime>> movieScreenings = new HashMap<>();
+    private Map<Movie, List<ScreeningTimeDto>> getMovieScreeningsTimeMap(List<Screening> screenings) {
+        Map<Movie, List<ScreeningTimeDto>> movieScreenings = new HashMap<>();
         for (Screening screening : screenings) {
-            ScreeningTime screeningTime = new ScreeningTime(screening);
+            ScreeningTimeDto screeningTimeDto = new ScreeningTimeDto(screening);
             if (!movieScreenings.containsKey(screening.getMovie())) {
-                movieScreenings.put(screening.getMovie(), new ArrayList<>(List.of(screeningTime)));
+                movieScreenings.put(screening.getMovie(), new ArrayList<>(List.of(screeningTimeDto)));
             } else {
-                movieScreenings.get(screening.getMovie()).add(screeningTime);
+                movieScreenings.get(screening.getMovie()).add(screeningTimeDto);
             }
         }
         return movieScreenings;

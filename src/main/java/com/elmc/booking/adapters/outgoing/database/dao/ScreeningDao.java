@@ -1,5 +1,6 @@
 package com.elmc.booking.adapters.outgoing.database.dao;
 
+import com.elmc.booking.adapters.outgoing.database.repository.ScreeningJpaRepository;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.Screening;
 import jakarta.transaction.Transactional;

@@ -21,10 +21,9 @@ import java.util.Set;
 public class ScreeningEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotNull
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "screening")
     private Set<ReservationEntity> reservations;
 

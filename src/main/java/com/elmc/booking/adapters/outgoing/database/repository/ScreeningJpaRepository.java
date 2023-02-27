@@ -1,4 +1,4 @@
-package com.elmc.booking.adapters.outgoing.database.dao;
+package com.elmc.booking.adapters.outgoing.database.repository;
 
 import com.elmc.booking.adapters.outgoing.database.entity.ScreeningEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +15,6 @@ public interface ScreeningJpaRepository extends JpaRepository<ScreeningEntity, L
     @Query("SELECT s FROM ScreeningEntity s WHERE s.startTime BETWEEN ?1 AND ?2")
     List<ScreeningEntity> findScreeningsInDateRange(LocalDateTime start, LocalDateTime end);
 
-    @Query("SELECT s FROM ScreeningEntity s JOIN FETCH s.reservations r JOIN FETCH r.tickets WHERE s.id = ?1")
+    @Query("SELECT s FROM ScreeningEntity s LEFT JOIN FETCH s.reservations r LEFT JOIN FETCH r.tickets WHERE s.id = ?1")
     Optional<ScreeningEntity> findScreeningWithReservationsAndTicketsById(long screeningId);
 }

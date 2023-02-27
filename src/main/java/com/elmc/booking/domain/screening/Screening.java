@@ -1,12 +1,14 @@
 package com.elmc.booking.domain.screening;
 
-import com.elmc.booking.domain.screening.exceptions.InvalidScreeningTimeIntervalException;
-import com.elmc.booking.domain.screening.exceptions.NoSuchSeatException;
+import com.elmc.booking.domain.screening.exceptions.*;
 import lombok.Getter;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -18,11 +20,11 @@ public class Screening {
 
     private final List<Seat> seats;
 
-    private final Room room;
+    private Room room;
 
-    private final LocalDateTime startTime;
+    private LocalDateTime startTime;
 
-    private final LocalDateTime endTime;
+    private LocalDateTime endTime;
 
     public Screening(long id,
                      @NonNull Movie movie,
@@ -39,6 +41,50 @@ public class Screening {
         this.seats = seats;
     }
 
+
+    public void bookSeats(List<SeatId> seatsToBook) {
+        if (!areSeatsFree(seatsToBook)) {
+            throw new SeatAlreadyBookedException();
+        }
+        if (isSingleSeatAfterBooking(seatsToBook)) {
+            throw new SingleSeatLeftOutAfterBookingException();
+        }
+        if (isAnySeatChosenMultipleTimes(seatsToBook)) {
+            throw new SameSeatChosenMultipleTimesException();
+        }
+        seats.stream()
+                .filter(seat -> seatsToBook.contains(seat.getSeatId()))
+                .forEach(seat -> seat.setSeatStatus(SeatStatus.BOOKED));
+    }
+
+    private boolean isAnySeatChosenMultipleTimes(List<SeatId> seatsToBook) {
+        return seatsToBook.size() != new HashSet<>(seatsToBook).size();
+    }
+
+    private boolean isSingleSeatAfterBooking(List<SeatId> seatsToBook) {
+        Map<SeatId, SeatStatus> seatStatusesAfterPotentialBooking = new HashMap<>();
+        seats.forEach(seat -> seatStatusesAfterPotentialBooking.put(seat.getSeatId(), seat.getSeatStatus()));
+        seatsToBook.forEach(seatId -> seatStatusesAfterPotentialBooking.put(seatId, SeatStatus.BOOKED));
+        for(int row = 1; row <= room.numberOfRows(); row++) {
+            for(int seatNumber = 2; seatNumber <= room.numberOfSeatsInRow() - 1; seatNumber++) {
+                SeatStatus previousSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber - 1));
+                SeatStatus currentSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber));
+                SeatStatus nextSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber + 1));
+                if (previousSeat == SeatStatus.BOOKED && currentSeat == SeatStatus.FREE && nextSeat == SeatStatus.BOOKED) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean areSeatsFree(List<SeatId> seatsToBook) {
+        return getFreeSeats().stream()
+                .map(Seat::getSeatId)
+                .collect(Collectors.toSet())
+                .containsAll(seatsToBook);
+    }
+
     public List<Seat> getBookedSeats() {
         return seats.stream()
                 .filter(Seat::isSeatBooked)
@@ -51,15 +97,16 @@ public class Screening {
                 .collect(Collectors.toList());
     }
 
-    public boolean isSeatFree(int rowNumber, int seatInRowNumber) {
-        return !isSeatBooked(rowNumber, seatInRowNumber);
+    public boolean isSeatFree(SeatId seatId) {
+        return !isSeatBooked(seatId);
     }
 
-    public boolean isSeatBooked(int rowNumber, int seatInRowNumber) {
+    public boolean isSeatBooked(SeatId seatId) {
         return seats.stream()
-                .filter((seat -> seat.getRowNumber() == rowNumber && seat.getSeatInRowNumber() == seatInRowNumber))
+                .filter((seat -> seat.getSeatId().rowNumber() == seatId.rowNumber() &&
+                        seat.getSeatId().seatInRowNumber() == seatId.seatInRowNumber()))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchSeatException(rowNumber, seatInRowNumber))
+                .orElseThrow(() -> new NoSuchSeatException(seatId.rowNumber(), seatId.seatInRowNumber()))
                 .isSeatBooked();
 
     }

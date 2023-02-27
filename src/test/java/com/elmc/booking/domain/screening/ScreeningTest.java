@@ -28,8 +28,8 @@ class ScreeningTest {
     void setUp() {
         movie = new Movie(1, "Django", "Lorem ipsum");
         room = new Room("Room A", 2, 2);
-        bookedSeats = List.of(new Seat(1, 1, SeatStatus.BOOKED), new Seat(1, 2, SeatStatus.BOOKED));
-        freeSeats = List.of(new Seat(2, 1, SeatStatus.FREE), new Seat(2, 2, SeatStatus.FREE));
+        bookedSeats = List.of(new Seat(new SeatId(1, 1), SeatStatus.BOOKED), new Seat(new SeatId(1, 2), SeatStatus.BOOKED));
+        freeSeats = List.of(new Seat(new SeatId(2, 1), SeatStatus.FREE), new Seat(new SeatId(2, 2), SeatStatus.FREE));
         allSeats = Stream.concat(bookedSeats.stream(), freeSeats.stream()).toList();
         startTime = LocalDateTime.parse("2023-01-01T10:30:00");
         endTime = LocalDateTime.parse("2023-01-01T12:45:00");
@@ -56,17 +56,17 @@ class ScreeningTest {
     @Test
     public void isSeatBookedShouldThrowExceptionWhenSeatNotExist() {
         assertThrows(NoSuchSeatException.class,
-                () -> screening.isSeatBooked(100, 100));
+                () -> screening.isSeatBooked(new SeatId(100, 100)));
     }
 
     @Test
     public void isSeatBookedShouldReturnFalseWhenSeatIsFree() {
-        assertFalse(screening.isSeatBooked(2, 2));
+        assertFalse(screening.isSeatBooked(new SeatId(2, 2)));
     }
 
     @Test
     public void isSeatBookedShouldReturnTrueWhenSeatIsBooked() {
-        assertTrue(screening.isSeatBooked(1, 1));
+        assertTrue(screening.isSeatBooked(new SeatId(1, 1)));
     }
 
     @Test

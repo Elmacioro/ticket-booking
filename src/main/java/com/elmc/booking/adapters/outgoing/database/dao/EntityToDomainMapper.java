@@ -1,6 +1,8 @@
 package com.elmc.booking.adapters.outgoing.database.dao;
 
 import com.elmc.booking.adapters.outgoing.database.entity.*;
+import com.elmc.booking.domain.reservation.Price;
+import com.elmc.booking.domain.reservation.TicketType;
 import com.elmc.booking.domain.screening.*;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
@@ -37,13 +39,19 @@ public class EntityToDomainMapper {
                 seats);
     }
 
+    public TicketType mapToDomain(@NonNull TicketTypeEntity ticketTypeEntity) {
+        Price price = new Price(ticketTypeEntity.getPrice(), ticketTypeEntity.getCurrency());
+        return new TicketType(ticketTypeEntity.getId(), ticketTypeEntity.getName(), price);
+    }
+
     private Set<Seat> getBookedSeats(ScreeningEntity screeningEntity) {
         return screeningEntity.getReservations()
                 .stream()
                 .map(ReservationEntity::getTickets)
                 .flatMap(Collection::stream)
-                .map(ticketEntity -> new Seat(ticketEntity.getRowNumber(),
-                        ticketEntity.getSeatInRowNumber(),
+                .map(ticketEntity -> new Seat(
+                        new SeatId(ticketEntity.getRowNumber(),
+                                ticketEntity.getSeatInRowNumber()),
                         SeatStatus.BOOKED))
                 .collect(Collectors.toSet());
     }
@@ -52,7 +60,8 @@ public class EntityToDomainMapper {
         List<Seat> seats = new ArrayList<>();
         for (int row = 1; row <= room.numberOfRows(); row++) {
             for (int seatInRow = 1; seatInRow <= room.numberOfSeatsInRow(); seatInRow++) {
-                Seat seat = new Seat(row, seatInRow, SeatStatus.FREE);
+                Seat seat = new Seat(new SeatId(row, seatInRow),
+                        SeatStatus.FREE);
                 if (bookedSeats.contains(seat)) {
                     seat.setSeatStatus(SeatStatus.BOOKED);
                 }

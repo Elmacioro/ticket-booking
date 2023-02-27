@@ -3,6 +3,7 @@ package com.elmc.booking.domain.screening;
 import lombok.NonNull;
 
 public record Room(@NonNull String name, int numberOfRows, int numberOfSeatsInRow) {
+
     public Room {
         validateParameters(name, numberOfRows, numberOfSeatsInRow);
     }

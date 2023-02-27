@@ -3,6 +3,7 @@ package com.elmc.booking.domain.screening;
 import lombok.NonNull;
 
 public record Movie(long id, @NonNull String title, @NonNull String description) {
+
     public Movie {
         validateParameters(title, description);
     }

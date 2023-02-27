@@ -17,8 +17,8 @@ import lombok.Setter;
 public class TicketEntity {
 
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull
     @ManyToOne
