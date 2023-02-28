@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 @Getter
 public class Reservation {
 
-    public static final String FIRSTNAME_REGEX = "^[A-Z][a-zżźćńółęąś]{2,}$";
+    public static final String FIRSTNAME_REGEX = "^\\p{IsUppercase}\\p{IsLowercase}{2,}$";
 
-    public static final String SURNAME_REGEX = "^[A-Z][a-zżźćńółęąś]{2,}(-[A-Z][a-zżźćńółęąś]{2,})?$";
+    public static final String SURNAME_REGEX = "^\\p{IsUppercase}\\p{IsLowercase}{2,}(-\\p{IsUppercase}\\p{IsLowercase}{2,})?$";
 
     private Long reservationId;
 

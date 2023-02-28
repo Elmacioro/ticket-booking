@@ -35,12 +35,12 @@ public class ReservationEntity {
 
     @NotNull
     @Size(min = 3)
-    @Pattern(regexp = "^[A-Z][a-zżźćńółęąś]{2,}$")
+    @Pattern(regexp = "^\\p{IsUppercase}\\p{IsLowercase}{2,}$")
     private String firstname;
 
     @NotNull
     @Size(min = 3)
-    @Pattern(regexp = "^[A-Z][a-zżźćńółęąś]{2,}(-[A-Z][a-zżźćńółęąś]{2,})?$")
+    @Pattern(regexp = "^\\p{IsUppercase}\\p{IsLowercase}{2,}(-\\p{IsUppercase}\\p{IsLowercase}{2,})?$")
     private String surname;
 
     @NotNull
