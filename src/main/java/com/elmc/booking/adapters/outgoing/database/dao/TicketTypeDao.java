@@ -1,5 +1,6 @@
 package com.elmc.booking.adapters.outgoing.database.dao;
 
+import com.elmc.booking.adapters.outgoing.database.dao.mapper.EntityToDomainMapper;
 import com.elmc.booking.adapters.outgoing.database.repository.TicketTypeJpaRepository;
 import com.elmc.booking.domain.ports.outgoing.TicketTypeRepository;
 import com.elmc.booking.domain.reservation.TicketType;
@@ -19,7 +20,7 @@ public class TicketTypeDao implements TicketTypeRepository {
     public List<TicketType> getTicketTypesByTypeNames(List<String> typeNames) {
         return ticketTypeJpaRepository.getByName(typeNames)
                 .stream()
-                .map(entityToDomainMapper::mapToDomain)
+                .map(entityToDomainMapper::map)
                 .toList();
     }
 }

@@ -1,5 +1,6 @@
 package com.elmc.booking.adapters.outgoing.database.dao;
 
+import com.elmc.booking.adapters.outgoing.database.dao.mapper.EntityToDomainMapper;
 import com.elmc.booking.adapters.outgoing.database.repository.ScreeningJpaRepository;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.Screening;
@@ -24,13 +25,13 @@ public class ScreeningDao implements ScreeningRepository {
     public List<Screening> getMovieScreeningsInDateRange(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
         return screeningJpaRepository.findScreeningsInDateRange(start, end)
                 .stream()
-                .map(entityToDomainMapper::mapToDomain)
+                .map(entityToDomainMapper::map)
                 .toList();
     }
 
     @Override
     public Optional<Screening> findScreeningById(long screeningId) {
         return screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId)
-                .map(entityToDomainMapper::mapToDomain);
+                .map(entityToDomainMapper::map);
     }
 }
