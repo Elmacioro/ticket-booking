@@ -18,10 +18,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> invalidScreeningTimeIntervalExceptionHandler(InvalidScreeningTimeIntervalException exception) {
         ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
-                String.format("""
-                        startTime has to be before endTime
-                        [startTime: %s], [endTime: %s]
-                        """,
+                String.format("startTime has to be before endTime [startTime: %s], [endTime: %s]",
                         exception.getStartTime(),
                         exception.getStartTime()));
         return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -30,10 +27,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> noSuchScreeningExceptionHandler(NoSuchScreeningException exception) {
         ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
-                String.format("""
-                        No screening was found for provided id:
-                        [screeningId: %d]
-                        """,
+                String.format("No screening was found for provided id: [screeningId: %d]",
                         exception.getScreeningId()));
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
@@ -41,7 +35,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> seatAlreadyBookedExceptionHandler(SeatAlreadyBookedException exception) {
         ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
-                        "Provided seats have been already booked by another client");
+                "Provided seats have been already booked by another client");
         return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
@@ -54,20 +48,16 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> invalidFirstnameExceptionHandler(InvalidFirstnameException exception) {
-        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), String.format("""
-                        Invalid firstname provided. Firstname must be at least 3 characters long
-                        [firstname: %s]
-                        """,
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), String.format(
+                "Invalid firstname provided. Firstname must be at least 3 characters long [firstname: %s]",
                 exception.getFirstname()));
         return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> invalidSurnameExceptionHandler(InvalidSurnameException exception) {
-        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), String.format("""
-                        Invalid surname provided. Surname must be at least 3 characters long
-                        [firstname: %s]
-                        """,
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), String.format(
+                "Invalid surname provided. Surname must be at least 3 characters long [firstname: %s]",
                 exception.getSurname()));
         return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     }
@@ -95,12 +85,18 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorMessage> invalidSeatsExceptionHandler(InvalidSeatsException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
+                "Provided seats do not exist for given screening");
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorMessage> differentCurrenciesExceptionHandler(DifferentCurrenciesException exception) {
         ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
-                String.format("""
-                        Only one currency can be used for single reservation
-                        [number of provided currencies: %d]
-                        """, exception.getNumberOfCurrencies()));
+                String.format(
+                        "Only one currency can be used for single reservation [number of provided currencies: %d]",
+                        exception.getNumberOfCurrencies()));
         return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 

@@ -74,6 +74,9 @@ public class Screening {
     }
 
     private void validateBooking(List<SeatId> seatsToBook) {
+        if(!areSeatIdsValid(seatsToBook)) {
+            throw new InvalidSeatsException();
+        }
         if (!areSeatsFree(seatsToBook)) {
             throw new SeatAlreadyBookedException();
         }
@@ -115,14 +118,19 @@ public class Screening {
         return false;
     }
 
+    private boolean areSeatIdsValid(List<SeatId> seatsToBook) {
+        return seats.stream()
+                .map(Seat::getSeatId)
+                .collect(Collectors.toSet())
+                .containsAll(seatsToBook);
+    }
+
     private boolean areSeatsFree(List<SeatId> seatsToBook) {
         return getFreeSeats().stream()
                 .map(Seat::getSeatId)
                 .collect(Collectors.toSet())
                 .containsAll(seatsToBook);
     }
-
-
 
     private void validateParameters(Room room,
                                     LocalDateTime startTime,

@@ -4,7 +4,6 @@ import com.elmc.booking.adapters.outgoing.database.entity.ReservationEntity;
 import com.elmc.booking.adapters.outgoing.database.entity.ScreeningEntity;
 import com.elmc.booking.adapters.outgoing.database.entity.TicketEntity;
 import com.elmc.booking.adapters.outgoing.database.entity.TicketTypeEntity;
-import com.elmc.booking.adapters.outgoing.database.repository.ReservationJpaRepository;
 import com.elmc.booking.domain.ports.outgoing.ReservationRepository;
 import com.elmc.booking.domain.reservation.Reservation;
 import jakarta.persistence.EntityManager;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ReservationDao implements ReservationRepository {
 
-    private final ReservationJpaRepository reservationJpaRepository;
     private final EntityManager entityManager;
 
     @Override
@@ -48,8 +46,7 @@ public class ReservationDao implements ReservationRepository {
                 .collect(Collectors.toSet());
 
         reservationEntity.setTickets(ticketEntities);
-
-        reservationJpaRepository.save(reservationEntity);
+        entityManager.persist(reservationEntity);
 
         return reservationEntity.getId();
     }

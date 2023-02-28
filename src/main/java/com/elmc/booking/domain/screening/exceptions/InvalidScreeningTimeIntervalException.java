@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 @Getter
 public class InvalidScreeningTimeIntervalException extends RuntimeException {
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private final LocalDateTime startTime;
+    private final LocalDateTime endTime;
 
     public InvalidScreeningTimeIntervalException(LocalDateTime startTime, LocalDateTime endTime) {
         super("Screening startTime has to be before endTime");

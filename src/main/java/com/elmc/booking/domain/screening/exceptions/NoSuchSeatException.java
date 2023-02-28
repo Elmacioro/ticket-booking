@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public class NoSuchSeatException extends RuntimeException {
 
-    private int rowNumber;
-    private int seatInRowNumber;
+    private final int rowNumber;
+    private final int seatInRowNumber;
 
     public NoSuchSeatException(int rowNumber, int seatInRowNumber) {
         super(String.format("There is no such seat with [rowNumber: %d, seatInRowNumber%d] for the screening",
