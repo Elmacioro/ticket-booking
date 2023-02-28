@@ -1,9 +1,6 @@
 package com.elmc.booking.adapters.incoming.rest;
 
-import com.elmc.booking.domain.reservation.exceptions.DifferentCurrenciesException;
-import com.elmc.booking.domain.reservation.exceptions.InvalidFirstnameException;
-import com.elmc.booking.domain.reservation.exceptions.InvalidSurnameException;
-import com.elmc.booking.domain.reservation.exceptions.NoTicketsForReservationException;
+import com.elmc.booking.domain.reservation.exceptions.*;
 import com.elmc.booking.domain.screening.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,6 +85,13 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ErrorMessage> invalidSeatsExceptionHandler(InvalidSeatsException exception) {
         ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
                 "Provided seats do not exist for given screening");
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorMessage> invalidTicketTypesExceptionHandler(InvalidTicketTypesException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
+                "Provided ticket types do not exist in the system");
         return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 

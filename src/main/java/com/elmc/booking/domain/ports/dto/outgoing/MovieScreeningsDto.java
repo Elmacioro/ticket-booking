@@ -1,10 +1,23 @@
 package com.elmc.booking.domain.ports.dto.outgoing;
 
 import com.elmc.booking.domain.ports.dto.shared.ScreeningTimeDto;
+import com.elmc.booking.domain.screening.Movie;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.List;
 
-public record MovieScreeningsDto(long movieId, @NonNull String movieTitle, @NonNull List<ScreeningTimeDto> screeningTimes) {
+@AllArgsConstructor
+@Getter
+public final class MovieScreeningsDto {
+    private final long movieId;
+    private final @NonNull String movieTitle;
+    private final @NonNull List<ScreeningTimeDto> screeningTimes;
 
+    public MovieScreeningsDto(Movie movie, List<ScreeningTimeDto> screeningTimes) {
+        this.movieId = movie.id();
+        this.movieTitle = movie.title();
+        this.screeningTimes = screeningTimes;
+    }
 }

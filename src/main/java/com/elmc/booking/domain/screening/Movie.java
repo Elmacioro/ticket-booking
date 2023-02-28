@@ -9,11 +9,11 @@ public record Movie(long id, @NonNull String title, @NonNull String description)
     }
 
     private void validateParameters(String title, String description) {
-        if (title.length() == 0 || title.length() > 250) {
-            throw new IllegalArgumentException("Movie title must be between 1 and 250 characters long");
+        if (title.isBlank()) {
+            throw new IllegalArgumentException("Movie title must not be empty");
         }
-        if (description.length() == 0 || description.length() > 1500) {
-            throw new IllegalArgumentException("Movie description must be between 0 and 1500 characters long");
+        if (description.isBlank()) {
+            throw new IllegalArgumentException("Movie description must not be empty");
         }
     }
 }

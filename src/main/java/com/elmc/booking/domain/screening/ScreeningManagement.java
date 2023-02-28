@@ -21,7 +21,8 @@ public class ScreeningManagement implements ScreeningService {
     @Override
     public List<MovieScreeningsDto> searchForMovieScreenings(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
         validateTimeInterval(start, end);
-        return mapToMovieScreenings(screeningRepository.getMovieScreeningsInDateRange(start, end));
+        List<Screening> screenings = screeningRepository.getMovieScreeningsInDateRange(start, end);
+        return getMoviesScreeningsTimes(screenings);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class ScreeningManagement implements ScreeningService {
         }
     }
 
-    private List<MovieScreeningsDto> mapToMovieScreenings(List<Screening> screenings) {
+    private List<MovieScreeningsDto> getMoviesScreeningsTimes(List<Screening> screenings) {
         Map<Movie, List<ScreeningTimeDto>> movieScreenings = getMovieScreeningsTimeMap(screenings);
         sortScreeningTimesByStartTime(movieScreenings);
         return convertMovieScreeningTimesToList(movieScreenings);
@@ -46,10 +47,8 @@ public class ScreeningManagement implements ScreeningService {
     private List<MovieScreeningsDto> convertMovieScreeningTimesToList(Map<Movie, List<ScreeningTimeDto>> movieScreenings) {
         return movieScreenings.entrySet()
                 .stream()
-                .map(entry -> new MovieScreeningsDto(entry.getKey().id(),
-                        entry.getKey().title(),
-                        entry.getValue()))
-                .sorted((Comparator.comparing(MovieScreeningsDto::movieTitle)))
+                .map(entry -> new MovieScreeningsDto(entry.getKey(), entry.getValue()))
+                .sorted(Comparator.comparing(MovieScreeningsDto::getMovieTitle))
                 .toList();
     }
 
@@ -69,6 +68,5 @@ public class ScreeningManagement implements ScreeningService {
         }
         return movieScreenings;
     }
-
 
 }

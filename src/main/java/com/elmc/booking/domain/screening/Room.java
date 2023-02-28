@@ -9,10 +9,10 @@ public record Room(@NonNull String name, int numberOfRows, int numberOfSeatsInRo
     }
 
     private void validateParameters(String name, int numberOfRows, int numberOfSeatsInRow) {
-        if(name.length() == 0 || name.length() > 50) {
-            throw new IllegalArgumentException("Room name has to be between 1 and 50 characters long");
+        if(name.isBlank()) {
+            throw new IllegalArgumentException("Room name must not be empty");
         }
-        if (numberOfRows <=0 || numberOfSeatsInRow <=0) {
+        if (numberOfRows <=0 || numberOfSeatsInRow <= 0) {
             throw new IllegalArgumentException("Room numberOfRows and numberOfSeatsInRow values have to be bigger than 0");
         }
     }

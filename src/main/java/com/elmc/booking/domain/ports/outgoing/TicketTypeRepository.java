@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface TicketTypeRepository {
 
-    List<TicketType> getTicketTypesByTypeNames(List<String> typeNames);
+    List<TicketType> getTicketTypesByIds(List<Long> typeNames);
 
 }

@@ -15,7 +15,7 @@ public record Price(@NonNull BigDecimal amount, @NonNull String currency) {
             throw new IllegalArgumentException("Price amount cannot be lower than 0");
         }
         if (currency.length() != 3) {
-            throw new IllegalArgumentException("Currency must be represented as 3 letter code");
+            throw new IllegalArgumentException("Currency must be represented as 3 character code");
         }
     }
 }
