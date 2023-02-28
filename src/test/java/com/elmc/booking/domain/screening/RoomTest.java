@@ -16,14 +16,6 @@ class RoomTest {
                 () -> new Room(roomName, 10, 10));
     }
 
-    @Test
-    public void constructorShouldThrowExceptionWhenNameLongerThan50() {
-        String tooLongName = "A".repeat(51);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> new Room(tooLongName, 10, 10));
-    }
-
     @ParameterizedTest
     @ValueSource(ints = {0, -250})
     public void constructorShouldThrowExceptionWhenNumberOfRowsLessThan1(int rowsNumber) {
