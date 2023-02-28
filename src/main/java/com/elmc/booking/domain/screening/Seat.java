@@ -19,11 +19,11 @@ public final class Seat {
         this.seatStatus = seatStatus;
     }
 
-    public boolean isSeatBooked() {
+    public boolean isBooked() {
         return seatStatus == SeatStatus.BOOKED;
     }
 
-    public boolean isSeatFree() {
+    public boolean isFree() {
         return seatStatus == SeatStatus.FREE;
     }
 

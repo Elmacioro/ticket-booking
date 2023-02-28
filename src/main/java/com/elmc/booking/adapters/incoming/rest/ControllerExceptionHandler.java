@@ -87,6 +87,14 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorMessage> bookingToLateExceptionHandler(BookingToLateException exception) {
+        ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
+                String.format("Seats can be booked at least %d minutes before screening starts",
+                        exception.getMinutesToBookBeforeScreening()));
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorMessage> differentCurrenciesExceptionHandler(DifferentCurrenciesException exception) {
         ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(),
                 String.format("""

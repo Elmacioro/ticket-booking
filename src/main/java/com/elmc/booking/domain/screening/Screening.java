@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 @Getter
 public class Screening {
 
+    private static final int MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK = 15;
+
     private final long id;
 
     private final Movie movie;
@@ -43,8 +45,40 @@ public class Screening {
 
 
     public void bookSeats(List<SeatId> seatsToBook) {
+        validateBooking(seatsToBook);
+        seats.stream()
+                .filter(seat -> seatsToBook.contains(seat.getSeatId()))
+                .forEach(seat -> seat.setSeatStatus(SeatStatus.BOOKED));
+    }
+
+    public List<Seat> getBookedSeats() {
+        return seats.stream()
+                .filter(Seat::isBooked)
+                .collect(Collectors.toList());
+    }
+
+    public List<Seat> getFreeSeats() {
+        return seats.stream()
+                .filter(Seat::isFree)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isSeatBooked(SeatId seatId) {
+        return seats.stream()
+                .filter((seat -> seat.getSeatId().rowNumber() == seatId.rowNumber() &&
+                        seat.getSeatId().seatInRowNumber() == seatId.seatInRowNumber()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchSeatException(seatId.rowNumber(), seatId.seatInRowNumber()))
+                .isBooked();
+
+    }
+
+    private void validateBooking(List<SeatId> seatsToBook) {
         if (!areSeatsFree(seatsToBook)) {
             throw new SeatAlreadyBookedException();
+        }
+        if (isTooLateForBooking()) {
+            throw new BookingToLateException(MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK);
         }
         if (isSingleSeatAfterBooking(seatsToBook)) {
             throw new SingleSeatLeftOutAfterBookingException();
@@ -52,9 +86,12 @@ public class Screening {
         if (isAnySeatChosenMultipleTimes(seatsToBook)) {
             throw new SameSeatChosenMultipleTimesException();
         }
-        seats.stream()
-                .filter(seat -> seatsToBook.contains(seat.getSeatId()))
-                .forEach(seat -> seat.setSeatStatus(SeatStatus.BOOKED));
+    }
+
+    private boolean isTooLateForBooking() {
+        return LocalDateTime.now()
+                .plusMinutes(MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK)
+                .isAfter(startTime);
     }
 
     private boolean isAnySeatChosenMultipleTimes(List<SeatId> seatsToBook) {
@@ -85,31 +122,7 @@ public class Screening {
                 .containsAll(seatsToBook);
     }
 
-    public List<Seat> getBookedSeats() {
-        return seats.stream()
-                .filter(Seat::isSeatBooked)
-                .collect(Collectors.toList());
-    }
 
-    public List<Seat> getFreeSeats() {
-        return seats.stream()
-                .filter(Seat::isSeatFree)
-                .collect(Collectors.toList());
-    }
-
-    public boolean isSeatFree(SeatId seatId) {
-        return !isSeatBooked(seatId);
-    }
-
-    public boolean isSeatBooked(SeatId seatId) {
-        return seats.stream()
-                .filter((seat -> seat.getSeatId().rowNumber() == seatId.rowNumber() &&
-                        seat.getSeatId().seatInRowNumber() == seatId.seatInRowNumber()))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchSeatException(seatId.rowNumber(), seatId.seatInRowNumber()))
-                .isSeatBooked();
-
-    }
 
     private void validateParameters(Room room,
                                     LocalDateTime startTime,
