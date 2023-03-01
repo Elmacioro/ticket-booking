@@ -23,8 +23,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public abstract class DomainToEntityMapper {
 
-    // To use entityManager for creating references
-    // we cannot inject it in allArgsConstructor as generated implementing class has to use super noArgsConstructor
+    // We cannot inject it in allArgsConstructor as generated implementing class has to use super noArgsConstructor
     // thus we inject it via setter
     private EntityManager entityManager;
 

@@ -1,7 +1,6 @@
-package com.elmc.booking.adapters.outgoing.database.dao;
+package com.elmc.booking.adapters.outgoing.database.repository;
 
 import com.elmc.booking.adapters.outgoing.database.entity.ScreeningEntity;
-import com.elmc.booking.adapters.outgoing.database.repository.ScreeningJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 class ScreeningJpaRepositoryIT {
 
-    private static final String COMMON_MOVIE_TITLE = "Pulp Fiction";
+    private static final String MOVIE_TITLE = "Pulp Fiction";
 
     @Autowired
     private ScreeningJpaRepository screeningJpaRepository;
@@ -34,7 +33,7 @@ class ScreeningJpaRepositoryIT {
 
         assertEquals(2, fetchedScreenings.size());
         fetchedScreenings.forEach(screeningEntity ->
-                assertEquals(COMMON_MOVIE_TITLE, screeningEntity.getMovie().getTitle()));
+                assertEquals(MOVIE_TITLE, screeningEntity.getMovie().getTitle()));
     }
 
     @Test
@@ -70,7 +69,7 @@ class ScreeningJpaRepositoryIT {
             ScreeningEntity entity = screeningEntity.get();
 
             assertEquals(3, entity.getReservations().size());
-            assertEquals(COMMON_MOVIE_TITLE, entity.getMovie().getTitle());
+            assertEquals(MOVIE_TITLE, entity.getMovie().getTitle());
         });
     }
 

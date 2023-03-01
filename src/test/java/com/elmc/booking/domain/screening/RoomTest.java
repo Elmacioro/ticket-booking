@@ -1,8 +1,6 @@
 package com.elmc.booking.domain.screening;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class RoomTest {
 
     @ParameterizedTest
-    @NullAndEmptySource
-    public void constructorShouldThrowExceptionWhenNameEmptyOrNull(String roomName) {
-        assertThrows(RuntimeException.class,
+    @ValueSource(strings = {"", "   "})
+    public void constructorShouldThrowExceptionWhenNameBlank(String roomName) {
+        assertThrows(IllegalArgumentException.class,
                 () -> new Room(roomName, 10, 10));
     }
 

@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 class ScreeningDaoIT {
 
-    private static final String COMMON_MOVIE_TITLE = "Pulp Fiction";
+    private static final String MOVIE_TITLE = "Pulp Fiction";
 
     @Autowired
     private ScreeningDao screeningDao;
@@ -48,7 +48,7 @@ class ScreeningDaoIT {
 
         assertEquals(2, screenings.size());
         screenings.forEach(screening ->
-                assertEquals(COMMON_MOVIE_TITLE, screening.getMovie().title()));
+                assertEquals(MOVIE_TITLE, screening.getMovie().title()));
     }
 
 }

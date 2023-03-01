@@ -24,11 +24,11 @@ public class Screening {
 
     private final List<Seat> seats;
 
-    private Room room;
+    private final Room room;
 
-    private LocalDateTime startTime;
+    private final LocalDateTime startTime;
 
-    private LocalDateTime endTime;
+    private final LocalDateTime endTime;
 
     public Screening(long id,
                      @NonNull Movie movie,
@@ -76,7 +76,7 @@ public class Screening {
     }
 
     private void validateBooking(List<SeatId> seatsToBook) {
-        if(!areSeatIdsValid(seatsToBook)) {
+        if(!seatsExist(seatsToBook)) {
             throw new SeatsNotExistException(seatsToBook);
         }
         if (!areSeatsFree(seatsToBook)) {
@@ -120,7 +120,7 @@ public class Screening {
         return false;
     }
 
-    private boolean areSeatIdsValid(List<SeatId> seatsToBook) {
+    private boolean seatsExist(List<SeatId> seatsToBook) {
         return seats.stream()
                 .map(Seat::getSeatId)
                 .collect(Collectors.toSet())

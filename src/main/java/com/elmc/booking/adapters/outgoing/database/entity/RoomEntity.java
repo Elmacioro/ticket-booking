@@ -27,6 +27,7 @@ public class RoomEntity {
     private Set<ScreeningEntity> screenings;
 
     @NotNull
+    @Column(unique = true)
     @Size(min = 1, max = 50)
     private String name;
 

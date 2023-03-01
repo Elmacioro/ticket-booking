@@ -1,1 +1,1 @@
-./mvnw clean install -DskipTests && ./mvnw -Dspring-boot.run.profiles=dev spring-boot:run
+./mvnw clean spring-boot:run -Dspring-boot.run.profiles=dev

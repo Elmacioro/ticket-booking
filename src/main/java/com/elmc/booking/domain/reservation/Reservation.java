@@ -11,8 +11,6 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Getter
@@ -42,10 +40,8 @@ public class Reservation {
                        @NonNull List<Ticket> tickets,
                        @NonNull String firstname,
                        @NonNull String surname) {
-        firstname = formatName(firstname);
-        surname = formatSurname(surname);
-        validateParameters(tickets, firstname, surname);
 
+        validateParameters(tickets, firstname, surname);
         this.firstname = firstname;
         this.surname = surname;
         this.reservationId = reservationId;
@@ -108,33 +104,6 @@ public class Reservation {
     private boolean isSurnameValid(String surname) {
         return surname.matches(SURNAME_REGEX);
 
-    }
-
-    private String capitalizeFirstLetter(String name) {
-        return name.substring(0, 1)
-                .toUpperCase() + name.substring(1);
-    }
-
-    private String formatName(String firstname) {
-        firstname = firstname.trim();
-        firstname = capitalizeFirstLetter(firstname);
-        return firstname;
-    }
-
-    private String formatSurname(String surname) {
-        surname = formatName(surname);
-        if (isTwoPartSurname(surname)) {
-            String[] parts = surname.split("-");
-            parts[1] = capitalizeFirstLetter(parts[1]);
-            surname =  parts[0] + "-" + parts[1];
-        }
-        return surname;
-    }
-
-    private boolean isTwoPartSurname(String surname) {
-        Pattern pattern = Pattern.compile("-");
-        Matcher matcher = pattern.matcher(surname);
-        return matcher.matches();
     }
 
 }
