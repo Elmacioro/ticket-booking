@@ -26,7 +26,7 @@ class ScreeningDaoIT {
 
     @Test
     @Sql("/data/simpleScreeningWithReservations.sql")
-    public void findScreeningByIdTest() {
+    public void findScreeningByIdShouldReturnRightScreening() {
         long screeningId = 1;
 
         Optional<Screening> optionalScreening = screeningDao.findScreeningById(screeningId);
@@ -40,7 +40,7 @@ class ScreeningDaoIT {
 
     @Test
     @Sql("/data/simpleScreeningsWithoutReservations.sql")
-    public void getMovieScreeningsInDateRangeTest() {
+    public void getMovieScreeningsInDateRangeShouldReturnRightScreenings() {
         LocalDateTime start = LocalDateTime.parse("2023-04-05T14:20:00");
         LocalDateTime end = LocalDateTime.parse("2023-04-05T17:00:00");
 

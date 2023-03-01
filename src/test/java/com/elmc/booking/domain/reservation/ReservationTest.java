@@ -80,7 +80,7 @@ class ReservationTest {
         assertEquals("PLN", actualPrice.currency());
     }
 
-    List<Ticket> prepareInvalidTicketsWithDifferentCurrencies() {
+    private List<Ticket> prepareInvalidTicketsWithDifferentCurrencies() {
         TicketType adult = new TicketType(1, "adult", new Price(BigDecimal.valueOf(25), "PLN"));
         TicketType child = new TicketType(2, "child", new Price(BigDecimal.valueOf(12.5), "USD"));
 

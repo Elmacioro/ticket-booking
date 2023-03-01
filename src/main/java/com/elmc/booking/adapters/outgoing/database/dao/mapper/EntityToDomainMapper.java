@@ -6,12 +6,10 @@ import com.elmc.booking.domain.reservation.TicketType;
 import com.elmc.booking.domain.screening.*;
 import lombok.NonNull;
 import org.mapstruct.*;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
 @Mapper(componentModel = "spring")
 public abstract class EntityToDomainMapper {
 

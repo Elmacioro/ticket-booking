@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 @Getter
 public class Reservation {
 
-    public static final String FIRSTNAME_REGEX = "^\\p{IsUppercase}\\p{IsLowercase}{2,}$";
+    private static final String FIRSTNAME_REGEX = "^\\p{IsUppercase}\\p{IsLowercase}{2,}$";
 
-    public static final String SURNAME_REGEX = "^\\p{IsUppercase}\\p{IsLowercase}{2,}(-\\p{IsUppercase}\\p{IsLowercase}{2,})?$";
+    private static final String SURNAME_REGEX = "^\\p{IsUppercase}\\p{IsLowercase}{2,}(-\\p{IsUppercase}\\p{IsLowercase}{2,})?$";
+
+    private static final int MINUTES_TO_EXPIRE = 5;
 
     @Setter
     private Long reservationId;
@@ -47,7 +49,7 @@ public class Reservation {
         this.reservationId = reservationId;
         this.screeningId = screeningId;
         this.tickets = tickets;
-        this.expirationDate = LocalDateTime.now().plusMinutes(5);
+        this.expirationDate = LocalDateTime.now().plusMinutes(MINUTES_TO_EXPIRE);
     }
 
     public Reservation(long screeningId,

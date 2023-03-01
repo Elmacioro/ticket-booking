@@ -14,11 +14,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-@Service
 @Transactional
 @Mapper(componentModel = "spring")
 public abstract class DomainToEntityMapper {
