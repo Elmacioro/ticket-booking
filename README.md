@@ -29,8 +29,7 @@ It performs 3 REST calls and prints responses to the console.
 ```
 
 Example output:
-
-```json
+```agsl
 1. Fetch movie screenings that start between 15:20 and 18:00 on 05.04.2023: 
 [{"movieId":3,"movieTitle":"Django","screeningTimes":[{"screeningId":5,"start":"2023-04-05T16:30:00","end":"2023-04-05T18:00:00"}]},{"movieId":2,"movieTitle":"Hateful 8","screeningTimes":[{"screeningId":3,"start":"2023-04-05T15:30:00","end":"2023-04-05T17:00:00"},{"screeningId":4,"start":"2023-04-05T17:30:00","end":"2023-04-05T19:00:00"}]},{"movieId":1,"movieTitle":"Pulp Fiction","screeningTimes":[{"screeningId":2,"start":"2023-04-05T16:00:00","end":"2023-04-05T17:30:00"}]}]
 
