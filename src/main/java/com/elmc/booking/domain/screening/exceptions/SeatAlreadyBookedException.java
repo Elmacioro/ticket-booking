@@ -1,8 +1,12 @@
 package com.elmc.booking.domain.screening.exceptions;
 
-public class SeatAlreadyBookedException extends RuntimeException {
+import com.elmc.booking.domain.screening.SeatId;
 
-    public SeatAlreadyBookedException() {
-        super("Provided seats are not available");
+import java.util.List;
+
+public class SeatAlreadyBookedException extends BookingInvalidSeatsException {
+
+    public SeatAlreadyBookedException(List<SeatId> seatsToBook) {
+        super("Provided seats are already booked", seatsToBook);
     }
 }

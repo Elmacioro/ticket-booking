@@ -14,17 +14,17 @@ curl --location --request POST 'localhost:8080/api/reservation' \
     {
         "row" : 2,
         "seatInRow" : 1,
-        "ticketTypeId" : "2"
+        "ticketTypeId" : 2
     },
     {
         "row" : 2,
         "seatInRow" : 2,
-        "ticketTypeId" : "3"
+        "ticketTypeId" : 3
     },
     {
         "row" : 2,
         "seatInRow" : 3,
-        "ticketTypeId" : "1"
+        "ticketTypeId" : 1
     }
 ]
 

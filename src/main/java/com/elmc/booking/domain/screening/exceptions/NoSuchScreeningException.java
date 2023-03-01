@@ -8,7 +8,7 @@ public class NoSuchScreeningException extends RuntimeException {
     private final long screeningId;
 
     public NoSuchScreeningException(long screeningId) {
-        super(String.format("No screening found for screeningId of: %d", screeningId));
+        super("No screening found for screeningId of: %d".formatted(screeningId));
         this.screeningId = screeningId;
     }
 }

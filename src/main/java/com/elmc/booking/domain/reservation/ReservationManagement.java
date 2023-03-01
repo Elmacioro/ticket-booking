@@ -12,12 +12,14 @@ import com.elmc.booking.domain.screening.Screening;
 import com.elmc.booking.domain.screening.SeatId;
 import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @AllArgsConstructor
 public class ReservationManagement implements ReservationService {
 
@@ -30,9 +32,11 @@ public class ReservationManagement implements ReservationService {
 
         Screening screening = getScreening(requestedReservationDto.screeningId());
         List<SeatId> seatsToBook = getSeatsToBook(requestedReservationDto);
+        log.debug("Booking seats for screening [seatIds: {}], [screening {}]", seatsToBook, screening);
         screening.bookSeats(seatsToBook);
 
-       List<Ticket> reservationTickets = getReservationTickets(requestedReservationDto);
+        List<Ticket> reservationTickets = getReservationTickets(requestedReservationDto);
+        log.debug("Creating reservation for tickets: {}", reservationTickets);
         Reservation reservation = new Reservation(screening.getId(),
                 reservationTickets,
                 requestedReservationDto.firstName(),
@@ -70,7 +74,7 @@ public class ReservationManagement implements ReservationService {
 
     private void validateWhetherProvidedTicketTypesExist(List<Long> ticketTypesIds, Map<Long, TicketType> TicketTypesByIds) {
         if (TicketTypesByIds.size() != new HashSet<>(ticketTypesIds).size()) {
-            throw new InvalidTicketTypesException();
+            throw new InvalidTicketTypesException(ticketTypesIds);
         }
     }
 

@@ -11,7 +11,7 @@ public class InvalidScreeningTimeIntervalException extends RuntimeException {
     private final LocalDateTime endTime;
 
     public InvalidScreeningTimeIntervalException(LocalDateTime startTime, LocalDateTime endTime) {
-        super("Screening startTime has to be before endTime");
+        super("endTime cannot be before startTime [startTime: %s, endTime: %s]".formatted(startTime, endTime));
         this.startTime = startTime;
         this.endTime = endTime;
     }

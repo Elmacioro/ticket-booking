@@ -8,7 +8,7 @@ public class BookingToLateException extends RuntimeException {
     private final int minutesToBookBeforeScreening;
 
     public BookingToLateException(int minutesToBookBeforeScreening) {
-        super(String.format("Booking not allowed %s minutes before screening", minutesToBookBeforeScreening));
+        super("Booking not allowed %s minutes before screening".formatted(minutesToBookBeforeScreening));
         this.minutesToBookBeforeScreening = minutesToBookBeforeScreening;
     }
 }

@@ -8,7 +8,7 @@ public class InvalidFirstnameException extends RuntimeException {
     private final String firstname;
 
     public InvalidFirstnameException(String firstname) {
-        super(String.format("Invalid firstname provided: [firstname: %s]", firstname));
+        super("Invalid firstname provided: [firstname: %s]".formatted(firstname));
         this.firstname = firstname;
     }
 }

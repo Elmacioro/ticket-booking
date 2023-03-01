@@ -5,11 +5,13 @@ import com.elmc.booking.adapters.outgoing.database.repository.TicketTypeJpaRepos
 import com.elmc.booking.domain.ports.outgoing.TicketTypeRepository;
 import com.elmc.booking.domain.reservation.TicketType;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@Slf4j
 @AllArgsConstructor
 public class TicketTypeDao implements TicketTypeRepository {
 
@@ -18,6 +20,7 @@ public class TicketTypeDao implements TicketTypeRepository {
 
     @Override
     public List<TicketType> getTicketTypesByIds(List<Long> ticketTypesIds) {
+        log.debug("Fetching for ticket types by ids: {}", ticketTypesIds);
         return ticketTypeJpaRepository.getByIds(ticketTypesIds)
                 .stream()
                 .map(entityToDomainMapper::map)

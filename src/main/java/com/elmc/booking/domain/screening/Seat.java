@@ -1,12 +1,10 @@
 package com.elmc.booking.domain.screening;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @EqualsAndHashCode(of = {"seatId"})
+@ToString
 public final class Seat {
 
     private final SeatId seatId;

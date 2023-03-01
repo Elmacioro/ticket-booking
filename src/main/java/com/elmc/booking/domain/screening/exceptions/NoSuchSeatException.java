@@ -9,9 +9,8 @@ public class NoSuchSeatException extends RuntimeException {
     private final int seatInRowNumber;
 
     public NoSuchSeatException(int rowNumber, int seatInRowNumber) {
-        super(String.format("There is no such seat with [rowNumber: %d, seatInRowNumber%d] for the screening",
-                rowNumber,
-                seatInRowNumber));
+        super("There is no such seat with [rowNumber: %d, seatInRowNumber%d] for the screening"
+                .formatted(rowNumber, seatInRowNumber));
         this.rowNumber = rowNumber;
         this.seatInRowNumber = seatInRowNumber;
     }

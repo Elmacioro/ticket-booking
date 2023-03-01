@@ -4,6 +4,7 @@ import com.elmc.booking.domain.ports.dto.outgoing.MovieScreeningsDto;
 import com.elmc.booking.domain.ports.dto.outgoing.ScreeningDetailsDto;
 import com.elmc.booking.domain.ports.incoming.ScreeningService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RequestMapping("/api/screening")
 @RestController
+@Slf4j
 @AllArgsConstructor
 public class ScreeningController {
 
@@ -26,12 +28,14 @@ public class ScreeningController {
                                                         @RequestParam("end")
                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                        LocalDateTime end) {
+        log.debug("Search for movie screenings received [startTime: {}], [endTime: {}]", start, end);
         return screeningService.searchForMovieScreenings(start, end);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ScreeningDetailsDto getScreeningDetails(@PathVariable long id) {
+        log.debug("Request for screening details received [screeningId: {}]", id);
         return screeningService.getScreeningDetails(id);
     }
 

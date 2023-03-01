@@ -3,6 +3,7 @@ package com.elmc.booking.domain.screening;
 import com.elmc.booking.domain.screening.exceptions.*;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
+@ToString
 public class Screening {
 
     private static final int MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK = 15;
@@ -75,19 +77,19 @@ public class Screening {
 
     private void validateBooking(List<SeatId> seatsToBook) {
         if(!areSeatIdsValid(seatsToBook)) {
-            throw new InvalidSeatsException();
+            throw new SeatsNotExistException(seatsToBook);
         }
         if (!areSeatsFree(seatsToBook)) {
-            throw new SeatAlreadyBookedException();
+            throw new SeatAlreadyBookedException(seatsToBook);
         }
         if (isTooLateForBooking()) {
             throw new BookingToLateException(MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK);
         }
-        if (isSingleSeatAfterBooking(seatsToBook)) {
-            throw new SingleSeatLeftOutAfterBookingException();
-        }
         if (isAnySeatChosenMultipleTimes(seatsToBook)) {
-            throw new SameSeatChosenMultipleTimesException();
+            throw new SameSeatChosenMultipleTimesException(seatsToBook);
+        }
+        if (isSingleSeatAfterBooking(seatsToBook)) {
+            throw new SingleSeatLeftOutAfterBookingException(seatsToBook);
         }
     }
 

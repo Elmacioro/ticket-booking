@@ -1,8 +1,12 @@
 package com.elmc.booking.domain.screening.exceptions;
 
-public class SingleSeatLeftOutAfterBookingException extends RuntimeException {
+import com.elmc.booking.domain.screening.SeatId;
 
-    public SingleSeatLeftOutAfterBookingException() {
-        super("Single seat would be left out after booking seats");
+import java.util.List;
+
+public class SingleSeatLeftOutAfterBookingException extends BookingInvalidSeatsException {
+
+    public SingleSeatLeftOutAfterBookingException(List<SeatId> seatsToBook) {
+        super("Single seat would be left out after booking seats", seatsToBook);
     }
 }

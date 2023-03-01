@@ -1,8 +1,12 @@
 package com.elmc.booking.domain.screening.exceptions;
 
-public class SameSeatChosenMultipleTimesException extends RuntimeException {
+import com.elmc.booking.domain.screening.SeatId;
 
-    public SameSeatChosenMultipleTimesException() {
-        super("You must not chose the same seat for booking more than once");
+import java.util.List;
+
+public class SameSeatChosenMultipleTimesException extends BookingInvalidSeatsException {
+
+    public SameSeatChosenMultipleTimesException(List<SeatId> seatsToBook) {
+        super("You must not chose the same seat for booking more than once", seatsToBook);
     }
 }

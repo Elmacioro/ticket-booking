@@ -8,7 +8,7 @@ public class InvalidSurnameException extends RuntimeException {
     private final String surname;
 
     public InvalidSurnameException(String surname) {
-        super(String.format("Provided surname is invalid: [surname: %s]", surname));
+        super("Provided surname is invalid: [surname: %s]".formatted(surname));
         this.surname = surname;
     }
 }

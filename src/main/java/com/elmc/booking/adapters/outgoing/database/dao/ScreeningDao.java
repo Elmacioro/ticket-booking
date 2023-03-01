@@ -7,6 +7,7 @@ import com.elmc.booking.domain.screening.Screening;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
+@Slf4j
 @Transactional
 public class ScreeningDao implements ScreeningRepository {
 
@@ -23,6 +25,7 @@ public class ScreeningDao implements ScreeningRepository {
 
     @Override
     public List<Screening> getMovieScreeningsInDateRange(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
+        log.debug("Fetching for screenings with startTime between {} and {}", start, end);
         return screeningJpaRepository.findScreeningsInDateRange(start, end)
                 .stream()
                 .map(entityToDomainMapper::map)
@@ -31,6 +34,7 @@ public class ScreeningDao implements ScreeningRepository {
 
     @Override
     public Optional<Screening> findScreeningById(long screeningId) {
+        log.debug("Fetching for screening with id: {}", screeningId);
         return screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId)
                 .map(entityToDomainMapper::map);
     }
