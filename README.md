@@ -1,6 +1,5 @@
 # ticket-booking
 
----
 
 ### Additional assumptions
 - Each row has the same number of seats
