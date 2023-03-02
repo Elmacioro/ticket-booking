@@ -54,26 +54,28 @@ public class ReservationManagement implements ReservationService {
 
     private List<Ticket> getReservationTickets(RequestedReservationDto requestedReservationDto) {
         List<Long> ticketTypeIds = getRequestedTicketTypesIds(requestedReservationDto);
-        Map<Long, TicketType> ticketTypesByIds = groupTicketTypesByIds(ticketTypeIds);
+        List<TicketType> ticketTypes = getRequestedTicketTypes(ticketTypeIds);
+        Map<Long, TicketType> ticketTypesByIds = groupTicketTypesByIds(ticketTypes);
 
         return requestedReservationDto.tickets()
                 .stream()
-                .map(ticketDto -> new Ticket(ticketDto.seatDto().rowNumber(),
-                        ticketDto.seatDto().seatInRowNumber(),
-                        ticketTypesByIds.get(ticketDto.ticketTypeId())))
+                .map(ticketDto -> ticketDto.toTicket(ticketTypesByIds.get(ticketDto.ticketTypeId())))
                 .toList();
     }
 
-    private Map<Long, TicketType> groupTicketTypesByIds(List<Long> ticketTypesIds) {
-        Map<Long, TicketType> TicketTypesByIds = ticketTypeRepository.getTicketTypesByIds(ticketTypesIds)
-                .stream()
+    private Map<Long, TicketType> groupTicketTypesByIds(List<TicketType> ticketTypes) {
+        return ticketTypes.stream()
                 .collect(Collectors.toMap(TicketType::id, ticketType -> ticketType));
-        validateWhetherProvidedTicketTypesExist(ticketTypesIds, TicketTypesByIds);
-        return TicketTypesByIds;
     }
 
-    private void validateWhetherProvidedTicketTypesExist(List<Long> ticketTypesIds, Map<Long, TicketType> TicketTypesByIds) {
-        if (TicketTypesByIds.size() != new HashSet<>(ticketTypesIds).size()) {
+    private List<TicketType> getRequestedTicketTypes(List<Long> ticketTypeIds) {
+        List<TicketType> ticketTypes = ticketTypeRepository.getTicketTypesByIds(ticketTypeIds);
+        validateWhetherProvidedTicketTypesExist(ticketTypeIds, ticketTypes);
+        return ticketTypes;
+    }
+
+    private void validateWhetherProvidedTicketTypesExist(List<Long> ticketTypesIds, List<TicketType> ticketTypes) {
+        if (ticketTypes.size() != new HashSet<>(ticketTypesIds).size()) {
             throw new InvalidTicketTypesException(ticketTypesIds);
         }
     }
