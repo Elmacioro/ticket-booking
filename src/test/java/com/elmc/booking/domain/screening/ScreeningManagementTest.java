@@ -54,16 +54,6 @@ class ScreeningManagementTest {
         assertAllScreeningTimesSortedByStartTime(movieScreeningsDtos);
     }
 
-    private void assertSortedByMovieTitle(List<MovieScreeningsDto> movieScreeningsDtos) {
-        assertTrue(Ordering.from(Comparator.comparing(MovieScreeningsDto::getMovieTitle))
-                .isOrdered(movieScreeningsDtos));
-    }
-
-    private void assertAllScreeningTimesSortedByStartTime(List<MovieScreeningsDto> movieScreeningsDtos) {
-        movieScreeningsDtos.forEach(dto -> assertTrue(Ordering.from(Comparator.comparing(ScreeningTimeDto::start))
-                .isOrdered(dto.getScreeningTimes())));
-    }
-
     @Test
     void getScreeningDetailsShouldThrowExceptionWhenScreeningIdNotExist() {
         long wrongScreeningId = 5967;
@@ -86,6 +76,17 @@ class ScreeningManagementTest {
         ScreeningDetailsDto actual = screeningManagement.getScreeningDetails(screening.getId());
         assertEquals(expected, actual);
     }
+
+    private void assertSortedByMovieTitle(List<MovieScreeningsDto> movieScreeningsDtos) {
+        assertTrue(Ordering.from(Comparator.comparing(MovieScreeningsDto::getMovieTitle))
+                .isOrdered(movieScreeningsDtos));
+    }
+
+    private void assertAllScreeningTimesSortedByStartTime(List<MovieScreeningsDto> movieScreeningsDtos) {
+        movieScreeningsDtos.forEach(dto -> assertTrue(Ordering.from(Comparator.comparing(ScreeningTimeDto::start))
+                .isOrdered(dto.getScreeningTimes())));
+    }
+
 
     private List<Screening> prepareUnsortedScreenings() {
         Movie pulpFiction = prepareMovie(1, "PulpFiction");
