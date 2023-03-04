@@ -6,7 +6,6 @@ import lombok.NonNull;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -75,62 +74,68 @@ public class Screening {
     }
 
     private void validateBooking(List<SeatId> seatsToBook) {
-        if(!seatsExist(seatsToBook)) {
-            throw new SeatsNotExistException(seatsToBook);
-        }
-        if (!areSeatsFree(seatsToBook)) {
-            throw new SeatAlreadyBookedException(seatsToBook);
-        }
-        if (isTooLateForBooking()) {
-            throw new BookingToLateException(MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK);
-        }
-        if (isAnySeatChosenMultipleTimes(seatsToBook)) {
-            throw new SameSeatChosenMultipleTimesException(seatsToBook);
-        }
-        if (isSingleSeatLeftOutAfterBooking(seatsToBook)) {
-            throw new SingleSeatLeftOutAfterBookingException(seatsToBook);
-        }
+        validateSeatsExist(seatsToBook);
+        validateSeatsAreFree(seatsToBook);
+        validateIsNotTooLateForBooking();
+        validateNoSeatIsChosenMultipleTimes(seatsToBook);
+        validateNoSingleSeatLeftOutAfterBooking(seatsToBook);
     }
 
-    private boolean isTooLateForBooking() {
-        return LocalDateTime.now()
+    private void validateIsNotTooLateForBooking() {
+        boolean isTooLateForBooking = LocalDateTime.now()
                 .plusMinutes(MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK)
                 .isAfter(startTime);
+        if (isTooLateForBooking) {
+            throw new BookingToLateException(MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK);
+        }
     }
 
-    private boolean isAnySeatChosenMultipleTimes(List<SeatId> seatsToBook) {
-        return seatsToBook.size() != new HashSet<>(seatsToBook).size();
+    private void validateNoSeatIsChosenMultipleTimes(List<SeatId> seatsToBook) {
+        if (seatsToBook.size() != new HashSet<>(seatsToBook).size()) {
+            throw new SameSeatChosenMultipleTimesException(seatsToBook);
+        }
     }
 
-    private boolean isSingleSeatLeftOutAfterBooking(List<SeatId> seatsToBook) {
-        Map<SeatId, SeatStatus> seatStatusesAfterPotentialBooking = new HashMap<>();
-        seats.forEach(seat -> seatStatusesAfterPotentialBooking.put(seat.getSeatId(), seat.getSeatStatus()));
-        seatsToBook.forEach(seatId -> seatStatusesAfterPotentialBooking.put(seatId, SeatStatus.BOOKED));
-        for(int row = 1; row <= room.rowsNumber(); row++) {
+    public void validateNoSingleSeatLeftOutAfterBooking(List<SeatId> seatsToBook) {
+        List<Integer> affectedRows = seatsToBook.stream().map(SeatId::rowNumber).toList();
+        Map<SeatId, SeatStatus> seatStatusesAfterPotentialBooking = getSeatStatusesAfterPotentialBooking(seatsToBook);
+        affectedRows.forEach(rowNumber -> {
             for(int seatNumber = 2; seatNumber <= room.seatsInRowNumber() - 1; seatNumber++) {
-                SeatStatus previousSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber - 1));
-                SeatStatus currentSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber));
-                SeatStatus nextSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber + 1));
+                SeatStatus previousSeat = seatStatusesAfterPotentialBooking.get(new SeatId(rowNumber, seatNumber - 1));
+                SeatStatus currentSeat = seatStatusesAfterPotentialBooking.get(new SeatId(rowNumber, seatNumber));
+                SeatStatus nextSeat = seatStatusesAfterPotentialBooking.get(new SeatId(rowNumber, seatNumber + 1));
                 if (previousSeat == SeatStatus.BOOKED && currentSeat == SeatStatus.FREE && nextSeat == SeatStatus.BOOKED) {
-                    return true;
+                    throw new SingleSeatLeftOutAfterBookingException(seatsToBook);
                 }
             }
+        });
+    }
+
+    private Map<SeatId, SeatStatus> getSeatStatusesAfterPotentialBooking(List<SeatId> seatsToBook) {
+        Map<SeatId, SeatStatus> seatStatusesAfterPotentialBooking = seats.stream()
+                .collect(Collectors.toMap(Seat::getSeatId, Seat::getSeatStatus));
+        seatsToBook.forEach(seatId -> seatStatusesAfterPotentialBooking.put(seatId, SeatStatus.BOOKED));
+        return seatStatusesAfterPotentialBooking;
+    }
+
+    private void validateSeatsExist(List<SeatId> seatsToBook) {
+        boolean seatsExist = seats.stream()
+                .map(Seat::getSeatId)
+                .collect(Collectors.toSet())
+                .containsAll(seatsToBook);
+        if (!seatsExist) {
+            throw new SeatsNotExistException(seatsToBook);
         }
-        return false;
     }
 
-    private boolean seatsExist(List<SeatId> seatsToBook) {
-        return seats.stream()
+    private void validateSeatsAreFree(List<SeatId> seatsToBook) {
+        boolean areSeatsFree = getFreeSeats().stream()
                 .map(Seat::getSeatId)
                 .collect(Collectors.toSet())
                 .containsAll(seatsToBook);
-    }
-
-    private boolean areSeatsFree(List<SeatId> seatsToBook) {
-        return getFreeSeats().stream()
-                .map(Seat::getSeatId)
-                .collect(Collectors.toSet())
-                .containsAll(seatsToBook);
+        if (!areSeatsFree) {
+            throw new SeatAlreadyBookedException(seatsToBook);
+        }
     }
 
     private void validateParameters(Room room,
