@@ -96,7 +96,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorMessage> invalidTicketTypesExceptionHandler(InvalidTicketTypesException exception) {
         log.error("Exception thrown InvalidTicketTypesException: Some provided ticket types do not exist {}",
-                exception.getProvidedTicketTypesIds(), exception);
+                exception.getProvidedTicketTypeNames(), exception);
         ErrorMessage errorMessage = new ErrorMessage("Provided ticket types do not exist in the system");
         return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
     }

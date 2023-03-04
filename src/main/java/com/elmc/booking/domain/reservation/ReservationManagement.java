@@ -53,37 +53,37 @@ public class ReservationManagement implements ReservationService {
     }
 
     private List<Ticket> getTickets(RequestedReservationDto requestedReservationDto) {
-        List<Long> ticketTypeIds = getRequestedTicketTypesIds(requestedReservationDto);
-        List<TicketType> ticketTypes = getRequestedTicketTypes(ticketTypeIds);
-        Map<Long, TicketType> ticketTypesByIds = groupTicketTypesByIds(ticketTypes);
+        List<String> ticketTypeNames = getRequestedTicketTypeNames(requestedReservationDto);
+        List<TicketType> ticketTypes = getRequestedTicketTypes(ticketTypeNames);
+        Map<String, TicketType> ticketTypeByName = mapTicketTypesToNames(ticketTypes);
 
         return requestedReservationDto.tickets()
                 .stream()
-                .map(ticketDto -> ticketDto.toTicket(ticketTypesByIds.get(ticketDto.ticketTypeId())))
+                .map(ticketDto -> ticketDto.toTicket(ticketTypeByName.get(ticketDto.ticketTypeName())))
                 .toList();
     }
 
-    private Map<Long, TicketType> groupTicketTypesByIds(List<TicketType> ticketTypes) {
+    private Map<String, TicketType> mapTicketTypesToNames(List<TicketType> ticketTypes) {
         return ticketTypes.stream()
-                .collect(Collectors.toMap(TicketType::id, ticketType -> ticketType));
+                .collect(Collectors.toMap(TicketType::name, ticketType -> ticketType));
     }
 
-    private List<TicketType> getRequestedTicketTypes(List<Long> ticketTypeIds) {
-        List<TicketType> ticketTypes = ticketTypeRepository.getTicketTypesByIds(ticketTypeIds);
-        validateWhetherProvidedTicketTypesExist(ticketTypeIds, ticketTypes);
+    private List<TicketType> getRequestedTicketTypes(List<String> ticketTypeNames) {
+        List<TicketType> ticketTypes = ticketTypeRepository.getTicketTypesByNames(ticketTypeNames);
+        validateWhetherProvidedTicketTypesExist(ticketTypeNames, ticketTypes);
         return ticketTypes;
     }
 
-    private void validateWhetherProvidedTicketTypesExist(List<Long> ticketTypesIds, List<TicketType> ticketTypes) {
-        if (ticketTypes.size() != new HashSet<>(ticketTypesIds).size()) {
-            throw new InvalidTicketTypesException(ticketTypesIds);
+    private void validateWhetherProvidedTicketTypesExist(List<String> ticketTypeNames, List<TicketType> ticketTypes) {
+        if (ticketTypes.size() != new HashSet<>(ticketTypeNames).size()) {
+            throw new InvalidTicketTypesException(ticketTypeNames);
         }
     }
 
-    private List<Long> getRequestedTicketTypesIds(RequestedReservationDto requestedReservationDto) {
+    private List<String> getRequestedTicketTypeNames(RequestedReservationDto requestedReservationDto) {
         return requestedReservationDto.tickets()
                 .stream()
-                .map(TicketDto::ticketTypeId)
+                .map(TicketDto::ticketTypeName)
                 .toList();
     }
 

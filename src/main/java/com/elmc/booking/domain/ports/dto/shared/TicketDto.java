@@ -4,7 +4,7 @@ import com.elmc.booking.domain.reservation.Ticket;
 import com.elmc.booking.domain.reservation.TicketType;
 import lombok.NonNull;
 
-public record TicketDto(@NonNull SeatDto seatDto, long ticketTypeId) {
+public record TicketDto(@NonNull SeatDto seatDto, String ticketTypeName) {
 
     public Ticket toTicket(TicketType ticketType) {
         return new Ticket(seatDto.rowNumber(),

@@ -7,10 +7,10 @@ import java.util.List;
 @Getter
 public class InvalidTicketTypesException extends RuntimeException {
 
-    private final List<Long> providedTicketTypesIds;
+    private final List<String> providedTicketTypeNames;
 
-    public InvalidTicketTypesException(List<Long> providedTicketTypesIds) {
+    public InvalidTicketTypesException(List<String> providedTicketTypeNames) {
         super("Provided ticket types do not exist in the system");
-        this.providedTicketTypesIds = providedTicketTypesIds;
+        this.providedTicketTypeNames = providedTicketTypeNames;
     }
 }

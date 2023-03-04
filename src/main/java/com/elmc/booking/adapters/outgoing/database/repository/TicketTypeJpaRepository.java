@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface TicketTypeJpaRepository extends JpaRepository<TicketTypeEntity, Long> {
 
-    @Query("SELECT tt FROM TicketTypeEntity tt WHERE tt.id in :ticketTypesIds")
-    List<TicketTypeEntity> getByIds(List<Long> ticketTypesIds);
+    @Query("SELECT tt FROM TicketTypeEntity tt WHERE tt.name in :ticketTypeNames")
+    List<TicketTypeEntity> getByTicketTypeNames(List<String> ticketTypeNames);
 
 }

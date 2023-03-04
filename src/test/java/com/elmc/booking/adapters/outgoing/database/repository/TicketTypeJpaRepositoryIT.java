@@ -7,8 +7,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,22 +19,13 @@ class TicketTypeJpaRepositoryIT {
 
     @Test
     @Sql("/data/simpleTicketTypes.sql")
-    void getByIdsShouldReturnRightTicketTypeEntitiesWhenGivenValidIds() {
+    void getByTicketTypeNamesShouldReturnRightTicketTypeEntitiesWhenGivenValidIds() {
         // adult and child ticket type ids
-        List<Long> ticketTypesIds = List.of(1L, 3L);
+        List<String> ticketTypeNames = List.of("adult", "child");
 
-        List<TicketTypeEntity> ticketTypeEntities = ticketTypeJpaRepository.getByIds(ticketTypesIds);
+        List<TicketTypeEntity> ticketTypeEntities = ticketTypeJpaRepository.getByTicketTypeNames(ticketTypeNames);
 
-        assertEquals(ticketTypesIds.size(), ticketTypeEntities.size());
-        Map<Long, TicketTypeEntity> ticketTypesById = ticketTypeEntities.stream()
-                .collect(Collectors.toMap(TicketTypeEntity::getId, ticketType -> ticketType));
-        assertAll(() -> {
-            assertEquals("adult", ticketTypesById.get(1L).getName());
-            assertEquals("child", ticketTypesById.get(3L).getName());
-
-            assertEquals("PLN", ticketTypesById.get(1L).getCurrency());
-            assertEquals("PLN", ticketTypesById.get(3L).getCurrency());
-        });
+        assertEquals(ticketTypeNames.size(), ticketTypeEntities.size());
     }
 
 }

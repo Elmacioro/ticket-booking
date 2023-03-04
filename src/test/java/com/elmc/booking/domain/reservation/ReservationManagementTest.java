@@ -74,11 +74,11 @@ class ReservationManagementTest {
     @Test
     void bookSeatsShouldThrowExceptionWhenProvidedInvalidTicketTypes() {
         List<TicketDto> invalidTicketDtos = getInvalidTicketDtos();
-        List<Long> ticketTypesIds = invalidTicketDtos.stream().map(TicketDto::ticketTypeId).toList();
+        List<String> ticketTypeNames = invalidTicketDtos.stream().map(TicketDto::ticketTypeName).toList();
         requestedReservationDto = new RequestedReservationDto(screeningId, firstname, surname, invalidTicketDtos);
 
         when(screeningRepository.findScreeningById(screeningId)).thenReturn(Optional.of(screening));
-        when(ticketTypeRepository.getTicketTypesByIds(ticketTypesIds)).thenReturn(List.of(adultTicketType));
+        when(ticketTypeRepository.getTicketTypesByNames(ticketTypeNames)).thenReturn(List.of(adultTicketType));
 
         assertThrows(InvalidTicketTypesException.class,
                 () -> reservationManagement.bookSeats(requestedReservationDto));
@@ -87,11 +87,11 @@ class ReservationManagementTest {
     @Test
     void bookSeatsShouldSaveReservation() {
         ArgumentCaptor<Reservation> reservationCaptor = ArgumentCaptor.forClass(Reservation.class);
-        List<Long> ticketTypesIds = tickets.stream().map(TicketDto::ticketTypeId).toList();
+        List<String> ticketTypeNames = tickets.stream().map(TicketDto::ticketTypeName).toList();
         requestedReservationDto = new RequestedReservationDto(screeningId, firstname, surname, tickets);
 
         when(screeningRepository.findScreeningById(screeningId)).thenReturn(Optional.of(screening));
-        when(ticketTypeRepository.getTicketTypesByIds(ticketTypesIds)).thenReturn(List.of(adultTicketType));
+        when(ticketTypeRepository.getTicketTypesByNames(ticketTypeNames)).thenReturn(List.of(adultTicketType));
         when(reservationRepository.save(reservationCaptor.capture())).thenReturn(1L);
 
         CreatedReservationDto actualReservationDto = reservationManagement.bookSeats(requestedReservationDto);
@@ -104,15 +104,15 @@ class ReservationManagementTest {
 
     private List<TicketDto> getInvalidTicketDtos() {
         return List.of(
-                new TicketDto(new SeatDto(2, 1), 52),
-                new TicketDto(new SeatDto(2, 2), 1)
+                new TicketDto(new SeatDto(2, 1), "someInvalidType"),
+                new TicketDto(new SeatDto(2, 2), "adult")
         );
     }
 
     private List<TicketDto> getValidTicketDtos() {
         return List.of(
-                new TicketDto(new SeatDto(2, 1), 1),
-                new TicketDto(new SeatDto(2, 2), 1)
+                new TicketDto(new SeatDto(2, 1), "adult"),
+                new TicketDto(new SeatDto(2, 2), "adult")
         );
     }
 

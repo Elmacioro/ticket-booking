@@ -29,6 +29,7 @@ public class TicketTypeEntity {
     private Set<TicketEntity> tickets;
 
     @NotNull
+    @Column(unique = true)
     @Size(min = 3, max = 25)
     private String name;
 

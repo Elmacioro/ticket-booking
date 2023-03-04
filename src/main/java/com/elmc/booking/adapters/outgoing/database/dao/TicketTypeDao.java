@@ -19,9 +19,9 @@ public class TicketTypeDao implements TicketTypeRepository {
     private final EntityToDomainMapper entityToDomainMapper;
 
     @Override
-    public List<TicketType> getTicketTypesByIds(List<Long> ticketTypesIds) {
-        log.debug("Fetching for ticket types by ids: {}", ticketTypesIds);
-        return ticketTypeJpaRepository.getByIds(ticketTypesIds)
+    public List<TicketType> getTicketTypesByNames(List<String> ticketTypeNames) {
+        log.debug("Fetching for ticket types by ids: {}", ticketTypeNames);
+        return ticketTypeJpaRepository.getByTicketTypeNames(ticketTypeNames)
                 .stream()
                 .map(entityToDomainMapper::map)
                 .toList();
