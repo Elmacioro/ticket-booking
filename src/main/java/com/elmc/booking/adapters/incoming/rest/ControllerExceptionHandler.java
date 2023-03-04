@@ -21,6 +21,14 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorMessage> tooLongIntervalExceptionHandler(TooLongIntervalException exception) {
+        log.error("Exception thrown TooLongIntervalException: {}", exception.getMessage(), exception);
+        ErrorMessage errorMessage = new ErrorMessage("Time interval between two dates can be at max 1 week [startTime: %s], [endTime: %s]"
+                        .formatted(exception.getStartTime(), exception.getStartTime()));
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorMessage> noSuchScreeningExceptionHandler(NoSuchScreeningException exception) {
         log.error("Exception thrown NoSuchScreeningException: {}", exception.getMessage(), exception);
         ErrorMessage errorMessage = new ErrorMessage("No screening was found for provided id: [screeningId: %d]"

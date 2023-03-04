@@ -5,6 +5,7 @@ import com.elmc.booking.domain.ports.dto.outgoing.ScreeningDetailsDto;
 import com.elmc.booking.domain.ports.dto.shared.ScreeningTimeDto;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.exceptions.InvalidScreeningTimeIntervalException;
+import com.elmc.booking.domain.screening.exceptions.TooLongIntervalException;
 import com.google.common.collect.Ordering;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +36,15 @@ class ScreeningManagementTest {
         LocalDateTime endTime = LocalDateTime.parse("2023-01-01T15:00:00");
 
         assertThrows(InvalidScreeningTimeIntervalException.class,
+                () -> screeningManagement.searchForMovieScreenings(startTime, endTime));
+    }
+
+    @Test
+    void searchForMovieScreeningsShouldThrowExceptionWhenIntervalTooLong() {
+        LocalDateTime startTime = LocalDateTime.parse("2023-01-01T20:30:00");
+        LocalDateTime endTime = LocalDateTime.parse("2023-01-15T15:00:00");
+
+        assertThrows(TooLongIntervalException.class,
                 () -> screeningManagement.searchForMovieScreenings(startTime, endTime));
     }
 

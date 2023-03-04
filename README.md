@@ -2,6 +2,7 @@
 
 
 ### Additional assumptions
+- Requested time interval for point 1. of the scenario can be at max 1 week.
 - Each row has the same number of seats
 - Reservation expiration date is set to 5 minutes after booking the seats
 
