@@ -81,6 +81,26 @@ public class Screening {
         validateNoSingleSeatLeftOutAfterBooking(seatsToBook);
     }
 
+    private void validateSeatsExist(List<SeatId> seatsToBook) {
+        boolean seatsExist = seats.stream()
+                .map(Seat::getSeatId)
+                .collect(Collectors.toSet())
+                .containsAll(seatsToBook);
+        if (!seatsExist) {
+            throw new SeatsNotExistException(seatsToBook);
+        }
+    }
+
+    private void validateSeatsAreAvailable(List<SeatId> seatsToBook) {
+        boolean areSeatsAvailable = getAvailableSeats().stream()
+                .map(Seat::getSeatId)
+                .collect(Collectors.toSet())
+                .containsAll(seatsToBook);
+        if (!areSeatsAvailable) {
+            throw new SeatAlreadyBookedException(seatsToBook);
+        }
+    }
+
     private void validateIsNotTooLateForBooking() {
         boolean isTooLateForBooking = LocalDateTime.now()
                 .plusMinutes(MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK)
@@ -116,26 +136,6 @@ public class Screening {
                 .collect(Collectors.toMap(Seat::getSeatId, Seat::getSeatStatus));
         seatsToBook.forEach(seatId -> seatStatusesAfterPotentialBooking.put(seatId, SeatStatus.BOOKED));
         return seatStatusesAfterPotentialBooking;
-    }
-
-    private void validateSeatsExist(List<SeatId> seatsToBook) {
-        boolean seatsExist = seats.stream()
-                .map(Seat::getSeatId)
-                .collect(Collectors.toSet())
-                .containsAll(seatsToBook);
-        if (!seatsExist) {
-            throw new SeatsNotExistException(seatsToBook);
-        }
-    }
-
-    private void validateSeatsAreAvailable(List<SeatId> seatsToBook) {
-        boolean areSeatsAvailable = getAvailableSeats().stream()
-                .map(Seat::getSeatId)
-                .collect(Collectors.toSet())
-                .containsAll(seatsToBook);
-        if (!areSeatsAvailable) {
-            throw new SeatAlreadyBookedException(seatsToBook);
-        }
     }
 
     private void validateParameters(Room room,

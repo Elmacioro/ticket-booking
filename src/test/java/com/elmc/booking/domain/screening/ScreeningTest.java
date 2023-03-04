@@ -40,7 +40,7 @@ class ScreeningTest {
     }
 
     @Test
-    public void bookSeatsShouldCorrectlyBoolSeats() {
+    public void bookSeatsShouldCorrectlyBookSeats() {
         List<SeatId> validSeats = List.of(new SeatId(2, 1), new SeatId(2, 2));
 
         screening.bookSeats(validSeats);

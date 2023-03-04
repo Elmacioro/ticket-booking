@@ -21,9 +21,6 @@ public class ScreeningDetailsDto {
     int seatsInRowNumber;
 
     @NonNull
-    List<SeatDto> bookedSeats;
-
-    @NonNull
     List<SeatDto> availableSeats;
 
     public ScreeningDetailsDto(Screening screening) {
@@ -31,7 +28,6 @@ public class ScreeningDetailsDto {
         this.roomName = room.name();
         this.rowsNumber = room.rowsNumber();
         this.seatsInRowNumber = room.seatsInRowNumber();
-        this.bookedSeats = screening.getBookedSeats().stream().map(SeatDto::new).toList();
         this.availableSeats = screening.getAvailableSeats().stream().map(SeatDto::new).toList();
     }
 
