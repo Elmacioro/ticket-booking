@@ -49,7 +49,7 @@ public abstract class EntityToDomainMapper {
     private List<Seat> getSeatsForRoom(RoomEntity room, Set<Seat> bookedSeats) {
         List<Seat> seats = new ArrayList<>();
         for (int row = 1; row <= room.getRowsNumber(); row++) {
-            for (int seatNumber = 1; seatNumber <= room.getSeatsInRow(); seatNumber++) {
+            for (int seatNumber = 1; seatNumber <= room.getSeatsInRowNumber(); seatNumber++) {
                 Seat seat = new Seat(new SeatId(row, seatNumber), SeatStatus.FREE);
                 if (bookedSeats.contains(seat)) {
                     seat.setSeatStatus(SeatStatus.BOOKED);

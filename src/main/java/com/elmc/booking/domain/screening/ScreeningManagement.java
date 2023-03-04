@@ -5,7 +5,6 @@ import com.elmc.booking.domain.ports.dto.outgoing.ScreeningDetailsDto;
 import com.elmc.booking.domain.ports.incoming.ScreeningService;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.exceptions.InvalidScreeningTimeIntervalException;
-import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
@@ -27,9 +26,8 @@ public class ScreeningManagement implements ScreeningService {
 
     @Override
     public ScreeningDetailsDto getScreeningDetails(long screeningId) {
-        return screeningRepository.findScreeningById(screeningId)
-                .map(ScreeningDetailsDto::new)
-                .orElseThrow(() -> new NoSuchScreeningException(screeningId));
+        Screening screening = screeningRepository.getScreeningById(screeningId);
+        return new ScreeningDetailsDto(screening);
     }
 
     private void validateTimeInterval(LocalDateTime start, LocalDateTime end) {

@@ -10,7 +10,6 @@ import com.elmc.booking.domain.ports.outgoing.TicketTypeRepository;
 import com.elmc.booking.domain.reservation.exceptions.InvalidTicketTypesException;
 import com.elmc.booking.domain.screening.Screening;
 import com.elmc.booking.domain.screening.SeatId;
-import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +29,7 @@ public class ReservationManagement implements ReservationService {
     @Override
     public CreatedReservationDto bookSeats(RequestedReservationDto requestedReservationDto) {
 
-        Screening screening = getScreening(requestedReservationDto.screeningId());
+        Screening screening = screeningRepository.getScreeningById(requestedReservationDto.screeningId());
         List<SeatId> seatsToBook = getSeatsToBook(requestedReservationDto);
         log.debug("Booking seats for screening [seatIds: {}], [screening {}]", seatsToBook, screening);
         screening.bookSeats(seatsToBook);
@@ -45,11 +44,6 @@ public class ReservationManagement implements ReservationService {
         reservation.setReservationId(reservationId);
 
         return new CreatedReservationDto(reservation);
-    }
-
-    private Screening getScreening(long screeningId) {
-        return screeningRepository.findScreeningById(screeningId)
-                .orElseThrow(() -> new NoSuchScreeningException(screeningId));
     }
 
     private List<Ticket> getTickets(RequestedReservationDto requestedReservationDto) {

@@ -5,7 +5,6 @@ import com.elmc.booking.domain.ports.dto.outgoing.ScreeningDetailsDto;
 import com.elmc.booking.domain.ports.dto.shared.ScreeningTimeDto;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.exceptions.InvalidScreeningTimeIntervalException;
-import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
 import com.google.common.collect.Ordering;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -55,23 +53,11 @@ class ScreeningManagementTest {
     }
 
     @Test
-    void getScreeningDetailsShouldThrowExceptionWhenScreeningIdNotExist() {
-        long wrongScreeningId = 5967;
-
-        when(screeningRepository.findScreeningById(wrongScreeningId))
-                .thenReturn(Optional.empty());
-
-        assertThrows(NoSuchScreeningException.class,
-                () -> screeningManagement.getScreeningDetails(wrongScreeningId));
-    }
-
-    @Test
     void getScreeningDetailsShouldReturnRightDetailsWhenCorrectScreeningId() {
         Screening screening = prepareSingleScreening();
         ScreeningDetailsDto expected = new ScreeningDetailsDto(screening);
 
-        when(screeningRepository.findScreeningById(screening.getId()))
-                .thenReturn(Optional.of(screening));
+        when(screeningRepository.getScreeningById(screening.getId())).thenReturn(screening);
 
         ScreeningDetailsDto actual = screeningManagement.getScreeningDetails(screening.getId());
         assertEquals(expected, actual);

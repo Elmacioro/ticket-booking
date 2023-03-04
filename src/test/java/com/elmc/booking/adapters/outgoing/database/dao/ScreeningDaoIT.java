@@ -10,7 +10,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,13 +28,9 @@ class ScreeningDaoIT {
     public void findScreeningByIdShouldReturnRightScreening() {
         long screeningId = 1;
 
-        Optional<Screening> optionalScreening = screeningDao.findScreeningById(screeningId);
+        Screening screening = screeningDao.getScreeningById(screeningId);
 
-        assertAll(() -> {
-            assertTrue(optionalScreening.isPresent());
-            Screening screening = optionalScreening.get();
-            assertEquals(6, screening.getBookedSeats().size());
-        });
+        assertAll(() -> assertEquals(6, screening.getBookedSeats().size()));
     }
 
     @Test

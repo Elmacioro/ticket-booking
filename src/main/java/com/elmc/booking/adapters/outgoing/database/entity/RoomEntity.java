@@ -35,5 +35,5 @@ public class RoomEntity {
     private int rowsNumber;
 
     @Min(1)
-    private int seatsInRow;
+    private int seatsInRowNumber;
 }

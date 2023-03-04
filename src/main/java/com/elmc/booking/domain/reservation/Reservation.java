@@ -35,7 +35,7 @@ public class Reservation {
 
     private final LocalDateTime expirationDate;
 
-    private boolean isPaid = false;
+    private final boolean isPaid = false;
 
     public Reservation(Long reservationId,
                        long screeningId,

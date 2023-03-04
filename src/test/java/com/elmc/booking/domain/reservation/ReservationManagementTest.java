@@ -9,7 +9,6 @@ import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.ports.outgoing.TicketTypeRepository;
 import com.elmc.booking.domain.reservation.exceptions.InvalidTicketTypesException;
 import com.elmc.booking.domain.screening.*;
-import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,23 +59,12 @@ class ReservationManagementTest {
     }
 
     @Test
-    void bookSeatsShouldThrowExceptionWhenInvalidScreeningId() {
-        long invalidScreeningId = 567;
-        requestedReservationDto = new RequestedReservationDto(invalidScreeningId, firstname, surname, tickets);
-
-        when(screeningRepository.findScreeningById(invalidScreeningId)).thenThrow(NoSuchScreeningException.class);
-
-        assertThrows(NoSuchScreeningException.class,
-                () -> reservationManagement.bookSeats(requestedReservationDto));
-    }
-
-    @Test
     void bookSeatsShouldThrowExceptionWhenProvidedInvalidTicketTypes() {
         List<TicketDto> invalidTicketDtos = getInvalidTicketDtos();
         List<String> ticketTypeNames = invalidTicketDtos.stream().map(TicketDto::ticketTypeName).toList();
         requestedReservationDto = new RequestedReservationDto(screeningId, firstname, surname, invalidTicketDtos);
 
-        when(screeningRepository.findScreeningById(screeningId)).thenReturn(Optional.of(screening));
+        when(screeningRepository.getScreeningById(screeningId)).thenReturn(screening);
         when(ticketTypeRepository.getTicketTypesByNames(ticketTypeNames)).thenReturn(List.of(adultTicketType));
 
         assertThrows(InvalidTicketTypesException.class,
@@ -90,7 +77,7 @@ class ReservationManagementTest {
         List<String> ticketTypeNames = tickets.stream().map(TicketDto::ticketTypeName).toList();
         requestedReservationDto = new RequestedReservationDto(screeningId, firstname, surname, tickets);
 
-        when(screeningRepository.findScreeningById(screeningId)).thenReturn(Optional.of(screening));
+        when(screeningRepository.getScreeningById(screeningId)).thenReturn(screening);
         when(ticketTypeRepository.getTicketTypesByNames(ticketTypeNames)).thenReturn(List.of(adultTicketType));
         when(reservationRepository.save(reservationCaptor.capture())).thenReturn(1L);
 
@@ -98,7 +85,7 @@ class ReservationManagementTest {
         assertEquals(reservationCaptor.getValue().getExpirationDate(), actualReservationDto.expirationTime());
         assertEquals(1L, actualReservationDto.reservationId());
         assertEquals("PLN", actualReservationDto.priceDto().currency());
-        assertTrue(BigDecimal.valueOf(50).compareTo(actualReservationDto.priceDto().amount()) == 0);
+        assertEquals(0, BigDecimal.valueOf(50).compareTo(actualReservationDto.priceDto().amount()));
     }
 
 

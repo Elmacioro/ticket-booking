@@ -4,6 +4,7 @@ import com.elmc.booking.adapters.outgoing.database.dao.mapper.EntityToDomainMapp
 import com.elmc.booking.adapters.outgoing.database.repository.ScreeningJpaRepository;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.Screening;
+import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -33,9 +33,10 @@ public class ScreeningDao implements ScreeningRepository {
     }
 
     @Override
-    public Optional<Screening> findScreeningById(long screeningId) {
+    public Screening getScreeningById(long screeningId) {
         log.debug("Fetching for screening with id: {}", screeningId);
         return screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId)
-                .map(entityToDomainMapper::map);
+                .map(entityToDomainMapper::map)
+                .orElseThrow(() -> new NoSuchScreeningException(screeningId));
     }
 }

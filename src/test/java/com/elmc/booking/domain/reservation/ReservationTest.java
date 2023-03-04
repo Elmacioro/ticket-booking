@@ -76,7 +76,7 @@ class ReservationTest {
 
         Price actualPrice = reservation.calculateTotalPrice();
 
-        assertTrue(BigDecimal.valueOf(55.5).compareTo(actualPrice.amount()) == 0);
+        assertEquals(0, BigDecimal.valueOf(55.5).compareTo(actualPrice.amount()));
         assertEquals("PLN", actualPrice.currency());
     }
 
