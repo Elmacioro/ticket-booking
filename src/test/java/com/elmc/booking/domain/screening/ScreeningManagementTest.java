@@ -103,7 +103,7 @@ class ScreeningManagementTest {
         List<Seat> roomSeats = new ArrayList<>();
         for(int row = 1; row <= room.rowsNumber(); row++) {
             for (int seatNr = 1; seatNr <= room.seatsInRowNumber(); seatNr++) {
-                roomSeats.add(new Seat(new SeatId(row, seatNr), SeatStatus.FREE));
+                roomSeats.add(new Seat(new SeatId(row, seatNr), SeatStatus.AVAILABLE));
             }
         }
         return roomSeats;
@@ -114,8 +114,8 @@ class ScreeningManagementTest {
         Room room = new Room("Room A", 2, 2);
         List<Seat> seats = List.of(new Seat(new SeatId(1, 1), SeatStatus.BOOKED),
                 new Seat(new SeatId(1, 2), SeatStatus.BOOKED),
-                new Seat(new SeatId(2, 1), SeatStatus.FREE),
-                new Seat(new SeatId(2, 2), SeatStatus.FREE));
+                new Seat(new SeatId(2, 1), SeatStatus.AVAILABLE),
+                new Seat(new SeatId(2, 2), SeatStatus.AVAILABLE));
         LocalDateTime startTime = LocalDateTime.parse("2023-01-01T10:30:00");
         LocalDateTime endTime = LocalDateTime.parse("2023-01-01T12:45:00");
         return new Screening(1, movie, room, startTime, endTime, seats);

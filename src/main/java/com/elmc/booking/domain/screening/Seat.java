@@ -21,8 +21,8 @@ public final class Seat {
         return seatStatus == SeatStatus.BOOKED;
     }
 
-    public boolean isFree() {
-        return seatStatus == SeatStatus.FREE;
+    public boolean isAvailable() {
+        return seatStatus == SeatStatus.AVAILABLE;
     }
 
 }

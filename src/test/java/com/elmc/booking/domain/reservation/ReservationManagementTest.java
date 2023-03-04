@@ -108,8 +108,8 @@ class ReservationManagementTest {
         Room room = new Room("Room A", 2, 2);
         List<Seat> seats = List.of(new Seat(new SeatId(1, 1), SeatStatus.BOOKED),
                 new Seat(new SeatId(1, 2), SeatStatus.BOOKED),
-                new Seat(new SeatId(2, 1), SeatStatus.FREE),
-                new Seat(new SeatId(2, 2), SeatStatus.FREE));
+                new Seat(new SeatId(2, 1), SeatStatus.AVAILABLE),
+                new Seat(new SeatId(2, 2), SeatStatus.AVAILABLE));
         LocalDateTime startTime = LocalDateTime.now().plusDays(5);
         LocalDateTime endTime = startTime.plusHours(2);
         return new Screening(1, movie, room, startTime, endTime, seats);

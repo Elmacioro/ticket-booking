@@ -17,7 +17,7 @@ class ScreeningTest {
     private Movie movie;
     private Room room;
     private List<Seat> bookedSeats;
-    private List<Seat> freeSeats;
+    private List<Seat> availableSeats;
     private List<Seat> allSeats;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -28,12 +28,12 @@ class ScreeningTest {
         movie = new Movie(1, "Django", "Lorem ipsum");
         room = new Room("Room A", 2, 3);
         bookedSeats = List.of(new Seat(new SeatId(1, 1), SeatStatus.BOOKED), new Seat(new SeatId(1, 2), SeatStatus.BOOKED));
-        freeSeats = List.of(
-                new Seat(new SeatId(1, 3), SeatStatus.FREE),
-                new Seat(new SeatId(2, 1), SeatStatus.FREE),
-                new Seat(new SeatId(2, 2), SeatStatus.FREE),
-                new Seat(new SeatId(2, 3), SeatStatus.FREE));
-        allSeats = Stream.concat(bookedSeats.stream(), freeSeats.stream()).toList();
+        availableSeats = List.of(
+                new Seat(new SeatId(1, 3), SeatStatus.AVAILABLE),
+                new Seat(new SeatId(2, 1), SeatStatus.AVAILABLE),
+                new Seat(new SeatId(2, 2), SeatStatus.AVAILABLE),
+                new Seat(new SeatId(2, 3), SeatStatus.AVAILABLE));
+        allSeats = Stream.concat(bookedSeats.stream(), availableSeats.stream()).toList();
         startTime = LocalDateTime.now().plusDays(5);
         endTime = startTime.plusHours(2);
         screening = new Screening(screeningId, movie, room, startTime, endTime, allSeats);
@@ -84,7 +84,7 @@ class ScreeningTest {
     }
 
     @Test
-    public void bookSeatsShouldThrowExceptionWhenSeatsAreNotFree() {
+    public void bookSeatsShouldThrowExceptionWhenSeatsAreNotAvailable() {
         List<SeatId> invalidSeats = List.of(new SeatId(1, 1), new SeatId(1, 2));
 
         assertThrows(SeatAlreadyBookedException.class,
@@ -123,7 +123,7 @@ class ScreeningTest {
     }
 
     @Test
-    public void isSeatBookedShouldReturnFalseWhenSeatIsFree() {
+    public void isSeatBookedShouldReturnFalseWhenSeatIsAvailable() {
         assertFalse(screening.isSeatBooked(new SeatId(2, 2)));
     }
 
@@ -138,8 +138,8 @@ class ScreeningTest {
     }
 
     @Test
-    public void getFreeSeatsShouldReturnOnlyFreeSeats() {
-        assertThat(freeSeats).hasSameElementsAs(screening.getFreeSeats());
+    public void getAvailableSeatsShouldReturnOnlyAvailableSeats() {
+        assertThat(availableSeats).hasSameElementsAs(screening.getAvailableSeats());
     }
 
 }

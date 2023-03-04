@@ -58,9 +58,9 @@ public class Screening {
                 .collect(Collectors.toList());
     }
 
-    public List<Seat> getFreeSeats() {
+    public List<Seat> getAvailableSeats() {
         return seats.stream()
-                .filter(Seat::isFree)
+                .filter(Seat::isAvailable)
                 .collect(Collectors.toList());
     }
 
@@ -75,7 +75,7 @@ public class Screening {
 
     private void validateBooking(List<SeatId> seatsToBook) {
         validateSeatsExist(seatsToBook);
-        validateSeatsAreFree(seatsToBook);
+        validateSeatsAreAvailable(seatsToBook);
         validateIsNotTooLateForBooking();
         validateNoSeatIsChosenMultipleTimes(seatsToBook);
         validateNoSingleSeatLeftOutAfterBooking(seatsToBook);
@@ -104,7 +104,7 @@ public class Screening {
                 SeatStatus previousSeat = seatStatusesAfterPotentialBooking.get(new SeatId(rowNumber, seatNumber - 1));
                 SeatStatus currentSeat = seatStatusesAfterPotentialBooking.get(new SeatId(rowNumber, seatNumber));
                 SeatStatus nextSeat = seatStatusesAfterPotentialBooking.get(new SeatId(rowNumber, seatNumber + 1));
-                if (previousSeat == SeatStatus.BOOKED && currentSeat == SeatStatus.FREE && nextSeat == SeatStatus.BOOKED) {
+                if (previousSeat == SeatStatus.BOOKED && currentSeat == SeatStatus.AVAILABLE && nextSeat == SeatStatus.BOOKED) {
                     throw new SingleSeatLeftOutAfterBookingException(seatsToBook);
                 }
             }
@@ -128,12 +128,12 @@ public class Screening {
         }
     }
 
-    private void validateSeatsAreFree(List<SeatId> seatsToBook) {
-        boolean areSeatsFree = getFreeSeats().stream()
+    private void validateSeatsAreAvailable(List<SeatId> seatsToBook) {
+        boolean areSeatsAvailable = getAvailableSeats().stream()
                 .map(Seat::getSeatId)
                 .collect(Collectors.toSet())
                 .containsAll(seatsToBook);
-        if (!areSeatsFree) {
+        if (!areSeatsAvailable) {
             throw new SeatAlreadyBookedException(seatsToBook);
         }
     }
