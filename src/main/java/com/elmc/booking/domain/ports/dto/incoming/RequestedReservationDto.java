@@ -6,7 +6,7 @@ import lombok.NonNull;
 import java.util.List;
 
 public record RequestedReservationDto(long screeningId,
-                                      @NonNull String firstName,
+                                      @NonNull String firstname,
                                       @NonNull String surname,
                                       @NonNull List<TicketDto> tickets) {
 }

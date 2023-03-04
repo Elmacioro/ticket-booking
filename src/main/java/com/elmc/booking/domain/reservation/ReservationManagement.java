@@ -28,22 +28,29 @@ public class ReservationManagement implements ReservationService {
 
     @Override
     public CreatedReservationDto bookSeats(RequestedReservationDto requestedReservationDto) {
-
         Screening screening = screeningRepository.getScreeningById(requestedReservationDto.screeningId());
-        List<SeatId> seatsToBook = getSeatsToBook(requestedReservationDto);
-        log.debug("Booking seats for screening [seatIds: {}], [screening {}]", seatsToBook, screening);
-        screening.bookSeats(seatsToBook);
+        bookSeatsForScreening(requestedReservationDto, screening);
+        Reservation reservation = createReservation(requestedReservationDto, screening);
+        return new CreatedReservationDto(reservation);
+    }
 
+    private Reservation createReservation(RequestedReservationDto requestedReservationDto, Screening screening) {
         List<Ticket> tickets = getTickets(requestedReservationDto);
         log.debug("Creating reservation for tickets: {}", tickets);
-        Reservation reservation = new Reservation(screening.getId(),
+        Reservation reservation = new Reservation(
+                screening.getId(),
                 tickets,
-                requestedReservationDto.firstName(),
+                requestedReservationDto.firstname(),
                 requestedReservationDto.surname());
         long reservationId = reservationRepository.save(reservation);
         reservation.setReservationId(reservationId);
+        return reservation;
+    }
 
-        return new CreatedReservationDto(reservation);
+    private void bookSeatsForScreening(RequestedReservationDto requestedReservationDto, Screening screening) {
+        List<SeatId> seatsToBook = getSeatsToBook(requestedReservationDto);
+        log.debug("Booking seats for screening [seatIds: {}], [screening {}]", seatsToBook, screening);
+        screening.bookSeats(seatsToBook);
     }
 
     private List<Ticket> getTickets(RequestedReservationDto requestedReservationDto) {

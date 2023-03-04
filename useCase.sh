@@ -8,7 +8,7 @@ curl --location --request POST 'localhost:8080/api/reservation' \
 --data-raw '{
 
 "screeningId" : 5,
-"firstName" : "Jan",
+"firstname" : "Jan",
 "surname" : "Wesoły-Wolny",
 "tickets" : [
     {
