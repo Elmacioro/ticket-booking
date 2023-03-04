@@ -32,8 +32,8 @@ public class RoomEntity {
     private String name;
 
     @Min(1)
-    private int numberOfRows;
+    private int rowsNumber;
 
     @Min(1)
-    private int numberOfSeatsInRow;
+    private int seatsInRow;
 }

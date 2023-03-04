@@ -8,7 +8,7 @@ public record TicketDto(@NonNull SeatDto seatDto, long ticketTypeId) {
 
     public Ticket toTicket(TicketType ticketType) {
         return new Ticket(seatDto.rowNumber(),
-                seatDto.seatInRowNumber(),
+                seatDto.seatNumber(),
                 ticketType);
     }
 

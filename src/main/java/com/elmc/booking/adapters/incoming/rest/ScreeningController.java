@@ -32,11 +32,11 @@ public class ScreeningController {
         return screeningService.searchForMovieScreenings(start, end);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{screeningId}")
     @ResponseStatus(HttpStatus.OK)
-    public ScreeningDetailsDto getScreeningDetails(@PathVariable long id) {
-        log.debug("Request for screening details received [screeningId: {}]", id);
-        return screeningService.getScreeningDetails(id);
+    public ScreeningDetailsDto getScreeningDetails(@PathVariable long screeningId) {
+        log.debug("Request for screening details received [screeningId: {}]", screeningId);
+        return screeningService.getScreeningDetails(screeningId);
     }
 
 }

@@ -27,9 +27,9 @@ class TicketTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, -250})
-    public void constructorShouldThrowExceptionWhenSeatInRowNumberLessThan1(int seatInRowNumber) {
+    public void constructorShouldThrowExceptionWhenSeatNumberNumberLessThan1(int seatNumber) {
         assertThrows(IllegalArgumentException.class,
-                () -> new Ticket(1, seatInRowNumber, ticketType));
+                () -> new Ticket(1, seatNumber, ticketType));
     }
 
 }

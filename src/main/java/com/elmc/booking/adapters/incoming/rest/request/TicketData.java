@@ -4,11 +4,11 @@ import com.elmc.booking.domain.ports.dto.shared.SeatDto;
 import com.elmc.booking.domain.ports.dto.shared.TicketDto;
 
 public record TicketData(int row,
-                         int seatInRow,
+                         int seatNumber,
                          long ticketTypeId) {
 
     public TicketDto toDto() {
-        return new TicketDto(new SeatDto(row, seatInRow),
+        return new TicketDto(new SeatDto(row, seatNumber),
                 ticketTypeId);
     }
 }

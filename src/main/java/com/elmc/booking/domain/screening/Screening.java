@@ -68,11 +68,10 @@ public class Screening {
     public boolean isSeatBooked(SeatId seatId) {
         return seats.stream()
                 .filter((seat -> seat.getSeatId().rowNumber() == seatId.rowNumber() &&
-                        seat.getSeatId().seatInRowNumber() == seatId.seatInRowNumber()))
+                        seat.getSeatId().seatNumber() == seatId.seatNumber()))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchSeatException(seatId.rowNumber(), seatId.seatInRowNumber()))
+                .orElseThrow(() -> new NoSuchSeatException(seatId.rowNumber(), seatId.seatNumber()))
                 .isBooked();
-
     }
 
     private void validateBooking(List<SeatId> seatsToBook) {
@@ -88,7 +87,7 @@ public class Screening {
         if (isAnySeatChosenMultipleTimes(seatsToBook)) {
             throw new SameSeatChosenMultipleTimesException(seatsToBook);
         }
-        if (isSingleSeatAfterBooking(seatsToBook)) {
+        if (isSingleSeatLeftOutAfterBooking(seatsToBook)) {
             throw new SingleSeatLeftOutAfterBookingException(seatsToBook);
         }
     }
@@ -103,12 +102,12 @@ public class Screening {
         return seatsToBook.size() != new HashSet<>(seatsToBook).size();
     }
 
-    private boolean isSingleSeatAfterBooking(List<SeatId> seatsToBook) {
+    private boolean isSingleSeatLeftOutAfterBooking(List<SeatId> seatsToBook) {
         Map<SeatId, SeatStatus> seatStatusesAfterPotentialBooking = new HashMap<>();
         seats.forEach(seat -> seatStatusesAfterPotentialBooking.put(seat.getSeatId(), seat.getSeatStatus()));
         seatsToBook.forEach(seatId -> seatStatusesAfterPotentialBooking.put(seatId, SeatStatus.BOOKED));
-        for(int row = 1; row <= room.numberOfRows(); row++) {
-            for(int seatNumber = 2; seatNumber <= room.numberOfSeatsInRow() - 1; seatNumber++) {
+        for(int row = 1; row <= room.rowsNumber(); row++) {
+            for(int seatNumber = 2; seatNumber <= room.seatsInRowNumber() - 1; seatNumber++) {
                 SeatStatus previousSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber - 1));
                 SeatStatus currentSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber));
                 SeatStatus nextSeat = seatStatusesAfterPotentialBooking.get(new SeatId(row, seatNumber + 1));
@@ -141,7 +140,7 @@ public class Screening {
         if (startTime.isAfter(endTime)) {
             throw new InvalidScreeningTimeIntervalException(startTime, endTime);
         }
-        int seatsInRoom = room.numberOfRows() * room.numberOfSeatsInRow();
+        int seatsInRoom = room.rowsNumber() * room.seatsInRowNumber();
         if (seatsInRoom != seats.size()) {
             throw new IllegalArgumentException("Number of seats has to match number of seats in the room");
         }

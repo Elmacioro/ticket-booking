@@ -1,14 +1,14 @@
 package com.elmc.booking.domain.screening;
 
-public record SeatId(int rowNumber, int seatInRowNumber) {
+public record SeatId(int rowNumber, int seatNumber) {
 
     public SeatId {
-        validateParameters(rowNumber, seatInRowNumber);
+        validateParameters(rowNumber, seatNumber);
     }
 
-    private void validateParameters(int rowNumber, int seatInRowNumber) {
-        if (rowNumber <= 0 || seatInRowNumber <= 0) {
-            throw new IllegalArgumentException("rowNumber and seatInRow cannot be lower than 1");
+    private void validateParameters(int rowNumber, int seatNumber) {
+        if (rowNumber <= 0 || seatNumber <= 0) {
+            throw new IllegalArgumentException("rowNumber and seatNumber cannot be lower than 1");
         }
     }
 }

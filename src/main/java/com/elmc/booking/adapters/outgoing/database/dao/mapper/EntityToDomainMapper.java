@@ -41,16 +41,16 @@ public abstract class EntityToDomainMapper {
                 .flatMap(Collection::stream)
                 .map(ticketEntity -> new Seat(
                         new SeatId(ticketEntity.getRowNumber(),
-                                ticketEntity.getSeatInRowNumber()),
+                                ticketEntity.getSeatNumber()),
                         SeatStatus.BOOKED))
                 .collect(Collectors.toSet());
     }
 
     private List<Seat> getSeatsForRoom(RoomEntity room, Set<Seat> bookedSeats) {
         List<Seat> seats = new ArrayList<>();
-        for (int row = 1; row <= room.getNumberOfRows(); row++) {
-            for (int seatInRow = 1; seatInRow <= room.getNumberOfSeatsInRow(); seatInRow++) {
-                Seat seat = new Seat(new SeatId(row, seatInRow), SeatStatus.FREE);
+        for (int row = 1; row <= room.getRowsNumber(); row++) {
+            for (int seatNumber = 1; seatNumber <= room.getSeatsInRow(); seatNumber++) {
+                Seat seat = new Seat(new SeatId(row, seatNumber), SeatStatus.FREE);
                 if (bookedSeats.contains(seat)) {
                     seat.setSeatStatus(SeatStatus.BOOKED);
                 }

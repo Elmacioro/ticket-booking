@@ -35,10 +35,10 @@ public class ReservationManagement implements ReservationService {
         log.debug("Booking seats for screening [seatIds: {}], [screening {}]", seatsToBook, screening);
         screening.bookSeats(seatsToBook);
 
-        List<Ticket> reservationTickets = getReservationTickets(requestedReservationDto);
-        log.debug("Creating reservation for tickets: {}", reservationTickets);
+        List<Ticket> tickets = getTickets(requestedReservationDto);
+        log.debug("Creating reservation for tickets: {}", tickets);
         Reservation reservation = new Reservation(screening.getId(),
-                reservationTickets,
+                tickets,
                 requestedReservationDto.firstName(),
                 requestedReservationDto.surname());
         long reservationId = reservationRepository.save(reservation);
@@ -52,7 +52,7 @@ public class ReservationManagement implements ReservationService {
                 .orElseThrow(() -> new NoSuchScreeningException(screeningId));
     }
 
-    private List<Ticket> getReservationTickets(RequestedReservationDto requestedReservationDto) {
+    private List<Ticket> getTickets(RequestedReservationDto requestedReservationDto) {
         List<Long> ticketTypeIds = getRequestedTicketTypesIds(requestedReservationDto);
         List<TicketType> ticketTypes = getRequestedTicketTypes(ticketTypeIds);
         Map<Long, TicketType> ticketTypesByIds = groupTicketTypesByIds(ticketTypes);

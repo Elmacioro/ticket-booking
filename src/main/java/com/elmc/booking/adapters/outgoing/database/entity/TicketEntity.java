@@ -32,6 +32,6 @@ public class TicketEntity {
     private int rowNumber;
 
     @Min(1)
-    private int seatInRowNumber;
+    private int seatNumber;
 
 }

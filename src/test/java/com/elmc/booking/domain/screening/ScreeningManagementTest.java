@@ -115,8 +115,8 @@ class ScreeningManagementTest {
 
     private List<Seat> prepareSeatsForRoom(Room room) {
         List<Seat> roomSeats = new ArrayList<>();
-        for(int row = 1; row <= room.numberOfRows(); row++) {
-            for (int seatNr = 1; seatNr <= room.numberOfSeatsInRow(); seatNr++) {
+        for(int row = 1; row <= room.rowsNumber(); row++) {
+            for (int seatNr = 1; seatNr <= room.seatsInRowNumber(); seatNr++) {
                 roomSeats.add(new Seat(new SeatId(row, seatNr), SeatStatus.FREE));
             }
         }

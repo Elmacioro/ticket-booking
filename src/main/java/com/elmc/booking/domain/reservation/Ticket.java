@@ -2,15 +2,15 @@ package com.elmc.booking.domain.reservation;
 
 import lombok.NonNull;
 
-public record Ticket(int rowNumber, int seatInRowNumber, @NonNull TicketType ticketType) {
+public record Ticket(int rowNumber, int seatNumber, @NonNull TicketType ticketType) {
 
     public Ticket {
-        validateParameters(rowNumber, seatInRowNumber);
+        validateParameters(rowNumber, seatNumber);
     }
 
-    private void validateParameters(int rowNumber, int seatInRowNumber) {
-        if (rowNumber <= 0 || seatInRowNumber <= 0) {
-            throw new IllegalArgumentException("rowNumber and seatInRow cannot be lower than 1");
+    private void validateParameters(int rowNumber, int seatNumber) {
+        if (rowNumber <= 0 || seatNumber <= 0) {
+            throw new IllegalArgumentException("rowNumber and seatNumber cannot be lower than 1");
         }
     }
 }
