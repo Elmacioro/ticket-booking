@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ScreeningTimeDto(
-        UUID screeningId,
+        @NonNull UUID screeningId,
         @NonNull LocalDateTime start,
         @NonNull LocalDateTime end) {
 
-    public ScreeningTimeDto(Screening screening) {
+    public ScreeningTimeDto(@NonNull Screening screening) {
         this(screening.getId(),
                 screening.getStartTime(),
                 screening.getEndTime());

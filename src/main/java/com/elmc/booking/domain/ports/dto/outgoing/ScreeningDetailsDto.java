@@ -23,7 +23,7 @@ public class ScreeningDetailsDto {
     @NonNull
     List<SeatDto> availableSeats;
 
-    public ScreeningDetailsDto(Screening screening) {
+    public ScreeningDetailsDto(@NonNull Screening screening) {
         Room room = screening.getRoom();
         this.roomName = room.name();
         this.rowsNumber = room.rowsNumber();

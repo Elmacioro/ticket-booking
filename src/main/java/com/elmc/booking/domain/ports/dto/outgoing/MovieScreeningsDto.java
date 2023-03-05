@@ -15,7 +15,7 @@ public final class MovieScreeningsDto {
     private final @NonNull String movieTitle;
     private final @NonNull List<ScreeningTimeDto> screeningTimes;
 
-    public MovieScreeningsDto(Movie movie, List<Screening> screeningTimes) {
+    public MovieScreeningsDto(@NonNull Movie movie, @NonNull List<Screening> screeningTimes) {
         this.movieTitle = movie.title();
         this.screeningTimes = screeningTimes.stream()
                 .map(ScreeningTimeDto::new)

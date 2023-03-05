@@ -28,7 +28,7 @@ public class ScreeningManagement implements ScreeningService {
     }
 
     @Override
-    public ScreeningDetailsDto getScreeningDetails(UUID screeningId) {
+    public ScreeningDetailsDto getScreeningDetails(@NonNull UUID screeningId) {
         Screening screening = screeningRepository.getScreeningById(screeningId);
         return new ScreeningDetailsDto(screening);
     }

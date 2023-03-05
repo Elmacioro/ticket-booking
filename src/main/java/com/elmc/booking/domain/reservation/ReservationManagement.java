@@ -33,7 +33,7 @@ public class ReservationManagement implements ReservationService {
     private final ScreeningRepository screeningRepository;
 
     @Override
-    public CreatedReservationDto bookSeats(RequestedReservationDto requestedReservationDto) {
+    public CreatedReservationDto bookSeats(@NonNull RequestedReservationDto requestedReservationDto) {
         Screening screening = screeningRepository.getScreeningById(requestedReservationDto.screeningId());
         bookSeatsForScreening(requestedReservationDto, screening);
         Reservation reservation = createReservation(requestedReservationDto, screening);

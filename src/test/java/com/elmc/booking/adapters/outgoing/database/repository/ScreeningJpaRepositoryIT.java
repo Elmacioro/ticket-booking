@@ -25,7 +25,7 @@ class ScreeningJpaRepositoryIT {
 
     @Test
     @Sql("/data/simpleScreeningsWithoutReservations.sql")
-    public void findScreeningsInDateRangeTest() {
+    public void findScreeningsInDateRangeShouldReturnCorrectEntities() {
         // It should fetch 2 screenings, both playing the same movie 'Pulp Fiction'
         LocalDateTime start = LocalDateTime.parse("2023-04-05T14:20:00");
         LocalDateTime end = LocalDateTime.parse("2023-04-05T17:00:00");

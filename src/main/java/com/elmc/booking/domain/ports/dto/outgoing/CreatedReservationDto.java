@@ -7,11 +7,11 @@ import lombok.NonNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record CreatedReservationDto(UUID reservationId,
+public record CreatedReservationDto(@NonNull UUID reservationId,
                                     @NonNull PriceDto priceDto,
                                     @NonNull LocalDateTime expirationTime) {
 
-    public CreatedReservationDto(Reservation reservation) {
+    public CreatedReservationDto(@NonNull Reservation reservation) {
         this(reservation.getReservationId(),
                 new PriceDto(reservation.calculateTotalPrice()),
                 reservation.getExpirationDate());

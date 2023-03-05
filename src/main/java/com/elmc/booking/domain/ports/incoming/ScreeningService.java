@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface ScreeningService {
     List<MovieScreeningsDto> searchForMovieScreenings(@NonNull LocalDateTime start, @NonNull LocalDateTime end);
 
-    ScreeningDetailsDto getScreeningDetails(UUID screeningId);
+    ScreeningDetailsDto getScreeningDetails(@NonNull UUID screeningId);
 }

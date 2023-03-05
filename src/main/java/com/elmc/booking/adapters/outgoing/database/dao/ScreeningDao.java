@@ -34,7 +34,7 @@ public class ScreeningDao implements ScreeningRepository {
     }
 
     @Override
-    public Screening getScreeningById(UUID screeningId) {
+    public Screening getScreeningById(@NonNull UUID screeningId) {
         log.debug("Fetching for screening with id: {}", screeningId);
         return screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId)
                 .map(entityToDomainMapper::map)

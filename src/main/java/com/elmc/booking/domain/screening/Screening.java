@@ -46,7 +46,7 @@ public class Screening {
     }
 
 
-    public void bookSeats(List<SeatId> seatsToBook) {
+    public void bookSeats(@NonNull List<SeatId> seatsToBook) {
         validateBooking(seatsToBook);
         seats.stream()
                 .filter(seat -> seatsToBook.contains(seat.getSeatId()))
@@ -65,7 +65,7 @@ public class Screening {
                 .collect(Collectors.toList());
     }
 
-    public boolean isSeatBooked(SeatId seatId) {
+    public boolean isSeatBooked(@NonNull SeatId seatId) {
         return seats.stream()
                 .filter((seat -> seat.getSeatId().rowNumber() == seatId.rowNumber() &&
                         seat.getSeatId().seatNumber() == seatId.seatNumber()))
@@ -117,7 +117,7 @@ public class Screening {
         }
     }
 
-    public void validateNoSingleSeatLeftOutAfterBooking(List<SeatId> seatsToBook) {
+    private void validateNoSingleSeatLeftOutAfterBooking(List<SeatId> seatsToBook) {
         List<Integer> affectedRows = seatsToBook.stream().map(SeatId::rowNumber).toList();
         Map<SeatId, SeatStatus> seatStatusesAfterPotentialBooking = getSeatStatusesAfterPotentialBooking(seatsToBook);
         affectedRows.forEach(rowNumber -> {

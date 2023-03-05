@@ -11,5 +11,5 @@ public interface ScreeningRepository {
 
     List<Screening> getMovieScreeningsInDateRange(@NonNull LocalDateTime start, @NonNull LocalDateTime end);
 
-    Screening getScreeningById(UUID screeningId);
+    Screening getScreeningById(@NonNull UUID screeningId);
 }
