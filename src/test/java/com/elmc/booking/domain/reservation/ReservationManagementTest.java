@@ -115,5 +115,4 @@ class ReservationManagementTest {
         return new Screening(UUID.randomUUID(), movie, room, startTime, endTime, seats);
     }
 
-
 }
