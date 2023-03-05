@@ -6,6 +6,7 @@
 - Search for movie screenings for point 1. of the scenario can apply only to future screenings.
 - Each row has the same number of seats
 - Reservation expiration date is set to 5 minutes after booking the seats
+- All tickets for single reservation must have the same currency
 
 ---
 
