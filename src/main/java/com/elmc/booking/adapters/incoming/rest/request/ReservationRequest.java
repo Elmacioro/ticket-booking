@@ -4,8 +4,9 @@ import com.elmc.booking.domain.ports.dto.incoming.RequestedReservationDto;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 
-public record ReservationRequest(long screeningId,
+public record ReservationRequest(@NotNull UUID screeningId,
                                  @NotNull String firstname,
                                  @NotNull String surname,
                                  @NotNull List<TicketData> tickets) {

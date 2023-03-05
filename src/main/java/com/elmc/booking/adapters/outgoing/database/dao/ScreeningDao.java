@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @AllArgsConstructor
@@ -33,7 +34,7 @@ public class ScreeningDao implements ScreeningRepository {
     }
 
     @Override
-    public Screening getScreeningById(long screeningId) {
+    public Screening getScreeningById(UUID screeningId) {
         log.debug("Fetching for screening with id: {}", screeningId);
         return screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId)
                 .map(entityToDomainMapper::map)

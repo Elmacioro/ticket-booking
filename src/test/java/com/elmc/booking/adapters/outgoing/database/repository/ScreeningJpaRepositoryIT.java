@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,9 +51,9 @@ class ScreeningJpaRepositoryIT {
     @Test
     @Sql("/data/simpleScreeningWithReservations.sql")
     public void findScreeningWithReservationsAndTicketsByIdShouldReturnNullForWrongId() {
-        long screeningId = 566;
+        UUID wrongScreeningId = UUID.fromString("7edc3ef0-3247-4a00-bed5-67fec54480e5");
 
-        Optional<ScreeningEntity> empty = screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId);
+        Optional<ScreeningEntity> empty = screeningJpaRepository.findScreeningWithReservationsAndTicketsById(wrongScreeningId);
 
         assertTrue(empty.isEmpty());
     }
@@ -60,7 +61,7 @@ class ScreeningJpaRepositoryIT {
     @Test
     @Sql("/data/simpleScreeningWithReservations.sql")
     public void findScreeningWithReservationsAndTicketsByIdTest() {
-        long screeningId = 1;
+        UUID screeningId = UUID.fromString("d4ca0e71-ba14-4fcf-b449-e00bb5b2d91e");
 
         Optional<ScreeningEntity> screeningEntity = screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId);
 

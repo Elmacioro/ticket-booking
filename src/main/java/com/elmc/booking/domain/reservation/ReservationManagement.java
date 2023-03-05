@@ -11,6 +11,7 @@ import com.elmc.booking.domain.reservation.exceptions.InvalidTicketTypesExceptio
 import com.elmc.booking.domain.screening.Screening;
 import com.elmc.booking.domain.screening.SeatId;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -22,8 +23,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ReservationManagement implements ReservationService {
 
+    @NonNull
     private final ReservationRepository reservationRepository;
+
+    @NonNull
     private final TicketTypeRepository ticketTypeRepository;
+
+    @NonNull
     private final ScreeningRepository screeningRepository;
 
     @Override
@@ -42,8 +48,7 @@ public class ReservationManagement implements ReservationService {
                 tickets,
                 requestedReservationDto.firstname(),
                 requestedReservationDto.surname());
-        long reservationId = reservationRepository.save(reservation);
-        reservation.setReservationId(reservationId);
+        reservationRepository.save(reservation);
         return reservation;
     }
 

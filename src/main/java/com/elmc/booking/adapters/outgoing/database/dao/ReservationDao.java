@@ -21,10 +21,9 @@ public class ReservationDao implements ReservationRepository {
     private final DomainToEntityMapper domainToEntityMapper;
 
     @Override
-    public long save(Reservation reservation) {
+    public void save(Reservation reservation) {
         log.debug("Saving reservation to the database: {}", reservation);
         ReservationEntity reservationEntity = domainToEntityMapper.map(reservation);
         entityManager.persist(reservationEntity);
-        return reservationEntity.getId();
     }
 }

@@ -6,9 +6,10 @@ import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public interface ScreeningService {
     List<MovieScreeningsDto> searchForMovieScreenings(@NonNull LocalDateTime start, @NonNull LocalDateTime end);
 
-    ScreeningDetailsDto getScreeningDetails(long screeningId);
+    ScreeningDetailsDto getScreeningDetails(UUID screeningId);
 }

@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +27,7 @@ class ScreeningDaoIT {
     @Test
     @Sql("/data/simpleScreeningWithReservations.sql")
     public void findScreeningByIdShouldReturnRightScreening() {
-        long screeningId = 1;
+        UUID screeningId = UUID.fromString("d4ca0e71-ba14-4fcf-b449-e00bb5b2d91e");
 
         Screening screening = screeningDao.getScreeningById(screeningId);
 

@@ -25,6 +25,7 @@ public abstract class DomainToEntityMapper {
     // thus we inject it via setter
     private EntityManager entityManager;
 
+    @Mapping(target = "id", source = "reservationId")
     public abstract ReservationEntity map(Reservation reservation);
 
     @Mapping(target = "price", source = "price.amount")

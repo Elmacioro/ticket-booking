@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "RESERVATION")
@@ -21,8 +22,7 @@ import java.util.Set;
 public class ReservationEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @NotNull
     @ManyToOne

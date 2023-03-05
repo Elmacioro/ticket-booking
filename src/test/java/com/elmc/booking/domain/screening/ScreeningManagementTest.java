@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -32,8 +33,8 @@ class ScreeningManagementTest {
 
     @Test
     void searchForMovieScreeningsShouldThrowExceptionWhenInvalidDateRange() {
-        LocalDateTime startTime = LocalDateTime.parse("2023-01-01T20:30:00");
-        LocalDateTime endTime = LocalDateTime.parse("2023-01-01T15:00:00");
+        LocalDateTime endTime = LocalDateTime.now().plusMinutes(1);
+        LocalDateTime startTime = endTime.plusDays(5);
 
         assertThrows(InvalidScreeningTimeIntervalException.class,
                 () -> screeningManagement.searchForMovieScreenings(startTime, endTime));
@@ -41,8 +42,8 @@ class ScreeningManagementTest {
 
     @Test
     void searchForMovieScreeningsShouldThrowExceptionWhenIntervalTooLong() {
-        LocalDateTime startTime = LocalDateTime.parse("2023-01-01T20:30:00");
-        LocalDateTime endTime = LocalDateTime.parse("2023-01-15T15:00:00");
+        LocalDateTime startTime = LocalDateTime.now().plusMinutes(1);
+        LocalDateTime endTime = startTime.plusWeeks(2);
 
         assertThrows(TooLongIntervalException.class,
                 () -> screeningManagement.searchForMovieScreenings(startTime, endTime));
@@ -51,8 +52,8 @@ class ScreeningManagementTest {
     @Test
     void searchForMovieScreeningsShouldReturnCorrectlySortedData() {
         List<Screening> unsortedScreenings = prepareUnsortedScreenings();
-        LocalDateTime startTime = LocalDateTime.parse("2023-01-01T00:00:00");
-        LocalDateTime endTime = LocalDateTime.parse("2023-01-01T23:59:59");
+        LocalDateTime startTime = LocalDateTime.now().plusMinutes(1);
+        LocalDateTime endTime = startTime.plusDays(3);
 
         when(screeningRepository.getMovieScreeningsInDateRange(startTime, endTime))
                 .thenReturn(unsortedScreenings);
@@ -93,15 +94,15 @@ class ScreeningManagementTest {
         List<Seat> seats = prepareSeatsForRoom(room);
 
         return List.of(
-                new Screening(1, pulpFiction, room, LocalDateTime.parse("2023-01-01T12:30:00"), LocalDateTime.parse("2023-01-01T13:30:00"), seats),
-                new Screening(2, pulpFiction, room, LocalDateTime.parse("2023-01-01T11:30:00"), LocalDateTime.parse("2023-01-01T12:30:00"), seats),
-                new Screening(3, pulpFiction, room, LocalDateTime.parse("2023-01-01T14:30:00"), LocalDateTime.parse("2023-01-01T15:30:00"), seats),
-                new Screening(4, django, room, LocalDateTime.parse("2023-01-01T09:30:00"), LocalDateTime.parse("2023-01-01T10:30:00"), seats),
-                new Screening(5, django, room, LocalDateTime.parse("2023-01-01T07:30:00"), LocalDateTime.parse("2023-01-01T08:30:00"), seats),
-                new Screening(6, django, room, LocalDateTime.parse("2023-01-01T08:30:00"), LocalDateTime.parse("2023-01-01T09:30:00"), seats),
-                new Screening(7, hateful8, room, LocalDateTime.parse("2023-01-01T14:30:00"), LocalDateTime.parse("2023-01-01T15:30:00"), seats),
-                new Screening(8, hateful8, room, LocalDateTime.parse("2023-01-01T17:30:00"), LocalDateTime.parse("2023-01-01T18:30:00"), seats),
-                new Screening(9, hateful8, room, LocalDateTime.parse("2023-01-01T08:30:00"), LocalDateTime.parse("2023-01-01T09:30:00"), seats)
+                new Screening(UUID.randomUUID(), pulpFiction, room, LocalDateTime.parse("2023-01-01T12:30:00"), LocalDateTime.parse("2023-01-01T13:30:00"), seats),
+                new Screening(UUID.randomUUID(), pulpFiction, room, LocalDateTime.parse("2023-01-01T11:30:00"), LocalDateTime.parse("2023-01-01T12:30:00"), seats),
+                new Screening(UUID.randomUUID(), pulpFiction, room, LocalDateTime.parse("2023-01-01T14:30:00"), LocalDateTime.parse("2023-01-01T15:30:00"), seats),
+                new Screening(UUID.randomUUID(), django, room, LocalDateTime.parse("2023-01-01T09:30:00"), LocalDateTime.parse("2023-01-01T10:30:00"), seats),
+                new Screening(UUID.randomUUID(), django, room, LocalDateTime.parse("2023-01-01T07:30:00"), LocalDateTime.parse("2023-01-01T08:30:00"), seats),
+                new Screening(UUID.randomUUID(), django, room, LocalDateTime.parse("2023-01-01T08:30:00"), LocalDateTime.parse("2023-01-01T09:30:00"), seats),
+                new Screening(UUID.randomUUID(), hateful8, room, LocalDateTime.parse("2023-01-01T14:30:00"), LocalDateTime.parse("2023-01-01T15:30:00"), seats),
+                new Screening(UUID.randomUUID(), hateful8, room, LocalDateTime.parse("2023-01-01T17:30:00"), LocalDateTime.parse("2023-01-01T18:30:00"), seats),
+                new Screening(UUID.randomUUID(), hateful8, room, LocalDateTime.parse("2023-01-01T08:30:00"), LocalDateTime.parse("2023-01-01T09:30:00"), seats)
         );
     }
 
@@ -122,13 +123,14 @@ class ScreeningManagementTest {
     private Screening prepareSingleScreening() {
         Movie movie = prepareMovie(1, "Django");
         Room room = new Room("Room A", 2, 2);
-        List<Seat> seats = List.of(new Seat(new SeatId(1, 1), SeatStatus.BOOKED),
+        List<Seat> seats = List.of(
+                new Seat(new SeatId(1, 1), SeatStatus.BOOKED),
                 new Seat(new SeatId(1, 2), SeatStatus.BOOKED),
                 new Seat(new SeatId(2, 1), SeatStatus.AVAILABLE),
                 new Seat(new SeatId(2, 2), SeatStatus.AVAILABLE));
-        LocalDateTime startTime = LocalDateTime.parse("2023-01-01T10:30:00");
-        LocalDateTime endTime = LocalDateTime.parse("2023-01-01T12:45:00");
-        return new Screening(1, movie, room, startTime, endTime, seats);
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusHours(1);
+        return new Screening(UUID.randomUUID(), movie, room, startTime, endTime, seats);
     }
 
 }

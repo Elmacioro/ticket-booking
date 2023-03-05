@@ -5,6 +5,7 @@ import com.elmc.booking.domain.ports.dto.outgoing.ScreeningDetailsDto;
 import com.elmc.booking.domain.ports.incoming.ScreeningService;
 import com.elmc.booking.domain.ports.outgoing.ScreeningRepository;
 import com.elmc.booking.domain.screening.exceptions.InvalidScreeningTimeIntervalException;
+import com.elmc.booking.domain.screening.exceptions.SearchForPastScreeningsException;
 import com.elmc.booking.domain.screening.exceptions.TooLongIntervalException;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ScreeningManagement implements ScreeningService {
 
+    @NonNull
     private final ScreeningRepository screeningRepository;
 
     @Override
@@ -26,7 +28,7 @@ public class ScreeningManagement implements ScreeningService {
     }
 
     @Override
-    public ScreeningDetailsDto getScreeningDetails(long screeningId) {
+    public ScreeningDetailsDto getScreeningDetails(UUID screeningId) {
         Screening screening = screeningRepository.getScreeningById(screeningId);
         return new ScreeningDetailsDto(screening);
     }
@@ -34,6 +36,9 @@ public class ScreeningManagement implements ScreeningService {
     private void validateTimeInterval(LocalDateTime start, LocalDateTime end) {
         if (start.isAfter(end)) {
             throw new InvalidScreeningTimeIntervalException(start, end);
+        }
+        if (start.isBefore(LocalDateTime.now())) {
+            throw new SearchForPastScreeningsException(start, end);
         }
         if (start.plusWeeks(1).isBefore(end)) {
             throw new TooLongIntervalException(start, end);

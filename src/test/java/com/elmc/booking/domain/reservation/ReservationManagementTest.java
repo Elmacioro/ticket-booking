@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +41,7 @@ class ReservationManagementTest {
     @InjectMocks
     private ReservationManagement reservationManagement;
 
-    private long screeningId;
+    private final UUID screeningId = UUID.randomUUID();
     private String firstname;
     private String surname;
     private List<TicketDto> tickets;
@@ -50,7 +51,6 @@ class ReservationManagementTest {
 
     @BeforeEach
     void setUp() {
-        screeningId = 1;
         firstname = "Jan";
         surname = "Nowak";
         tickets = getValidTicketDtos();
@@ -79,11 +79,11 @@ class ReservationManagementTest {
 
         when(screeningRepository.getScreeningById(screeningId)).thenReturn(screening);
         when(ticketTypeRepository.getTicketTypesByNames(ticketTypeNames)).thenReturn(List.of(adultTicketType));
-        when(reservationRepository.save(reservationCaptor.capture())).thenReturn(1L);
 
         CreatedReservationDto actualReservationDto = reservationManagement.bookSeats(requestedReservationDto);
+        verify(reservationRepository).save(reservationCaptor.capture());
         assertEquals(reservationCaptor.getValue().getExpirationDate(), actualReservationDto.expirationTime());
-        assertEquals(1L, actualReservationDto.reservationId());
+        assertEquals(reservationCaptor.getValue().getReservationId(), actualReservationDto.reservationId());
         assertEquals("PLN", actualReservationDto.priceDto().currency());
         assertEquals(0, BigDecimal.valueOf(50).compareTo(actualReservationDto.priceDto().amount()));
     }
@@ -112,7 +112,7 @@ class ReservationManagementTest {
                 new Seat(new SeatId(2, 2), SeatStatus.AVAILABLE));
         LocalDateTime startTime = LocalDateTime.now().plusDays(5);
         LocalDateTime endTime = startTime.plusHours(2);
-        return new Screening(1, movie, room, startTime, endTime, seats);
+        return new Screening(UUID.randomUUID(), movie, room, startTime, endTime, seats);
     }
 
 

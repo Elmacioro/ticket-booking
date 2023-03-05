@@ -4,5 +4,5 @@ import com.elmc.booking.domain.reservation.Reservation;
 
 public interface ReservationRepository {
 
-    long save(Reservation reservation);
+    void save(Reservation reservation);
 }

@@ -4,9 +4,10 @@ import com.elmc.booking.domain.screening.Screening;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record ScreeningTimeDto(
-        long screeningId,
+        UUID screeningId,
         @NonNull LocalDateTime start,
         @NonNull LocalDateTime end) {
 

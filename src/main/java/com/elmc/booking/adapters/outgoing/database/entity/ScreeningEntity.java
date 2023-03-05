@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "SCREENING")
@@ -21,8 +22,7 @@ import java.util.Set;
 public class ScreeningEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "screening")
     private Set<ReservationEntity> reservations;

@@ -29,9 +29,17 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorMessage> searchForPastScreeningsExceptionHandler(SearchForPastScreeningsException exception) {
+        log.error("Exception thrown SearchForPastScreeningsException: {}", exception.getMessage(), exception);
+        ErrorMessage errorMessage = new ErrorMessage("Screenings search can only apply to future screenings [startTime: %s], [endTime: %s]"
+                        .formatted(exception.getStartTime(), exception.getStartTime()));
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorMessage> noSuchScreeningExceptionHandler(NoSuchScreeningException exception) {
         log.error("Exception thrown NoSuchScreeningException: {}", exception.getMessage(), exception);
-        ErrorMessage errorMessage = new ErrorMessage("No screening was found for provided id: [screeningId: %d]"
+        ErrorMessage errorMessage = new ErrorMessage("No screening was found for provided id: [screeningId: %s]"
                 .formatted(exception.getScreeningId()));
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }

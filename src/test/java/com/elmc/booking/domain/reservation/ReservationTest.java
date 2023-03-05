@@ -12,12 +12,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReservationTest {
 
-    private final long screeningId = 1;
+    private final UUID screeningId = UUID.randomUUID();
     private String firstname;
     private String surname;
     private List<Ticket> tickets;

@@ -16,14 +16,14 @@ class RoomTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, -250})
-    public void constructorShouldThrowExceptionWhenNumberOfRowsLessThan1(int rowsNumber) {
+    public void constructorShouldThrowExceptionWhenRowsNumberLessThan1(int rowsNumber) {
         assertThrows(IllegalArgumentException.class,
                 () -> new Room("Room A", rowsNumber, 10));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, -250})
-    public void constructorShouldThrowExceptionWhenNumberOfSeatsInRowLessThan1(int seatsInRowNumber) {
+    public void constructorShouldThrowExceptionWhenSeatsInRowNumberLessThan1(int seatsInRowNumber) {
         assertThrows(IllegalArgumentException.class,
                 () -> new Room("Room A", 10, seatsInRowNumber));
     }

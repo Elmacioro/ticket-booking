@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ScreeningTest {
 
-    private final long screeningId = 1;
+    private final UUID screeningId = UUID.randomUUID();
     private Movie movie;
     private Room room;
     private List<Seat> bookedSeats;

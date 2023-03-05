@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,7 +18,7 @@ public class Screening {
 
     private static final int MINUTES_BEFORE_SCREENING_ALLOWED_TO_BOOK = 15;
 
-    private final long id;
+    private final UUID id;
 
     private final Movie movie;
 
@@ -29,7 +30,7 @@ public class Screening {
 
     private final LocalDateTime endTime;
 
-    public Screening(long id,
+    public Screening(@NonNull UUID id,
                      @NonNull Movie movie,
                      @NonNull Room room,
                      @NonNull LocalDateTime startTime,

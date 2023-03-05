@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RequestMapping("/api/screening")
 @RestController
@@ -34,7 +35,7 @@ public class ScreeningController {
 
     @GetMapping("/{screeningId}")
     @ResponseStatus(HttpStatus.OK)
-    public ScreeningDetailsDto getScreeningDetails(@PathVariable long screeningId) {
+    public ScreeningDetailsDto getScreeningDetails(@PathVariable UUID screeningId) {
         log.debug("Request for screening details received [screeningId: {}]", screeningId);
         return screeningService.getScreeningDetails(screeningId);
     }

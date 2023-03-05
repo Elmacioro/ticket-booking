@@ -6,11 +6,11 @@ import com.elmc.booking.domain.reservation.exceptions.InvalidSurnameException;
 import com.elmc.booking.domain.reservation.exceptions.NoTicketsForReservationException;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Getter
@@ -22,10 +22,9 @@ public class Reservation {
 
     private static final int MINUTES_TO_EXPIRE = 5;
 
-    @Setter
-    private Long reservationId;
+    private final UUID reservationId;
 
-    private final long screeningId;
+    private final UUID screeningId;
 
     private final List<Ticket> tickets;
 
@@ -37,8 +36,7 @@ public class Reservation {
 
     private final boolean isPaid = false;
 
-    public Reservation(Long reservationId,
-                       long screeningId,
+    public Reservation(@NonNull UUID screeningId,
                        @NonNull List<Ticket> tickets,
                        @NonNull String firstname,
                        @NonNull String surname) {
@@ -46,17 +44,10 @@ public class Reservation {
         validateParameters(tickets, firstname, surname);
         this.firstname = firstname;
         this.surname = surname;
-        this.reservationId = reservationId;
+        this.reservationId = UUID.randomUUID();
         this.screeningId = screeningId;
         this.tickets = tickets;
         this.expirationDate = LocalDateTime.now().plusMinutes(MINUTES_TO_EXPIRE);
-    }
-
-    public Reservation(long screeningId,
-                       List<Ticket> tickets,
-                       String firstname,
-                       String surname) {
-        this(null, screeningId, tickets, firstname, surname);
     }
 
     public Price calculateTotalPrice() {

@@ -12,12 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public final class MovieScreeningsDto {
-    private final long movieId;
     private final @NonNull String movieTitle;
     private final @NonNull List<ScreeningTimeDto> screeningTimes;
 
     public MovieScreeningsDto(Movie movie, List<Screening> screeningTimes) {
-        this.movieId = movie.id();
         this.movieTitle = movie.title();
         this.screeningTimes = screeningTimes.stream()
                 .map(ScreeningTimeDto::new)
