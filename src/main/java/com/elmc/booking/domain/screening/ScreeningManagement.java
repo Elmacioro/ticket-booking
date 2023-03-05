@@ -22,7 +22,7 @@ public class ScreeningManagement implements ScreeningService {
     public List<MovieScreeningsDto> searchForMovieScreenings(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
         validateTimeInterval(start, end);
         List<Screening> screenings = screeningRepository.getMovieScreeningsInDateRange(start, end);
-        return getSortedMoviesScreeningsTimes(screenings);
+        return getSortedByMovieTitleAndScreeningTimes(screenings);
     }
 
     @Override
@@ -40,13 +40,28 @@ public class ScreeningManagement implements ScreeningService {
         }
     }
 
-    private List<MovieScreeningsDto> getSortedMoviesScreeningsTimes(List<Screening> screenings) {
+    private List<MovieScreeningsDto> getSortedByMovieTitleAndScreeningTimes(List<Screening> screenings) {
+        List<Screening> screeningSortedByStartTime = sortScreeningsByStartTime(screenings);
+        List<MovieScreeningsDto> groupedScreenings  = groupScreeningsByMovies(screeningSortedByStartTime);
+        return sortByMovieTitle(groupedScreenings);
+    }
+
+    private List<Screening> sortScreeningsByStartTime(List<Screening> screenings) {
         return screenings.stream()
                 .sorted(Comparator.comparing(Screening::getStartTime))
+                .toList();
+    }
+
+    private List<MovieScreeningsDto> groupScreeningsByMovies(List<Screening> screenings) {
+        return screenings.stream()
                 .collect(Collectors.groupingBy(Screening::getMovie))
                 .entrySet().stream()
-                .map(entry -> new MovieScreeningsDto(entry.getKey(),
-                        entry.getValue()))
+                .map(entry -> new MovieScreeningsDto(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+
+    private List<MovieScreeningsDto> sortByMovieTitle(List<MovieScreeningsDto> movieScreeningsDtos) {
+        return movieScreeningsDtos.stream()
                 .sorted(Comparator.comparing(MovieScreeningsDto::getMovieTitle))
                 .toList();
     }
