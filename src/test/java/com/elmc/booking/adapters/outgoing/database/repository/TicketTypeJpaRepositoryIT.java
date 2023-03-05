@@ -20,7 +20,6 @@ class TicketTypeJpaRepositoryIT {
     @Test
     @Sql("/data/simpleTicketTypes.sql")
     void getByTicketTypeNamesShouldReturnRightTicketTypeEntitiesWhenGivenValidNames() {
-        // adult and child ticket type names
         List<String> ticketTypeNames = List.of("adult", "child");
 
         List<TicketTypeEntity> ticketTypeEntities = ticketTypeJpaRepository.getByTicketTypeNames(ticketTypeNames);
