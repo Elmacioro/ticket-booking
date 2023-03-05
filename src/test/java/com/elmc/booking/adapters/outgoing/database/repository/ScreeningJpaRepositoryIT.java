@@ -60,7 +60,7 @@ class ScreeningJpaRepositoryIT {
 
     @Test
     @Sql("/data/simpleScreeningWithReservations.sql")
-    public void findScreeningWithReservationsAndTicketsByIdTest() {
+    public void findScreeningWithReservationsAndTicketsByIdShouldReturnCorrectScreeningEntity() {
         UUID screeningId = UUID.fromString("d4ca0e71-ba14-4fcf-b449-e00bb5b2d91e");
 
         Optional<ScreeningEntity> screeningEntity = screeningJpaRepository.findScreeningWithReservationsAndTicketsById(screeningId);

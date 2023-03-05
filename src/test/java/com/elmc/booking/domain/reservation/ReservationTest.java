@@ -27,7 +27,7 @@ class ReservationTest {
     void setUp() {
         firstname = "Łucja";
         surname = "Kowalska";
-        tickets = prepareTValidTickets();
+        tickets = prepareValidTickets();
     }
 
     @ParameterizedTest
@@ -91,7 +91,7 @@ class ReservationTest {
     }
 
 
-    private List<Ticket> prepareTValidTickets() {
+    private List<Ticket> prepareValidTickets() {
         TicketType adult = new TicketType(1, "adult", new Price(BigDecimal.valueOf(25), "PLN"));
         TicketType child = new TicketType(2, "child", new Price(BigDecimal.valueOf(12.5), "PLN"));
         TicketType student = new TicketType(3, "student", new Price(BigDecimal.valueOf(18), "PLN"));

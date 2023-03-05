@@ -1,6 +1,7 @@
 package com.elmc.booking.adapters.outgoing.database.dao;
 
 import com.elmc.booking.domain.screening.Screening;
+import com.elmc.booking.domain.screening.exceptions.NoSuchScreeningException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,15 @@ class ScreeningDaoIT {
 
     @Test
     @Sql("/data/simpleScreeningsWithoutReservations.sql")
+    void getScreeningByIdShouldThrowExceptionWhenFetchingNonExistingScreening() {
+        UUID screeningId = UUID.fromString("e4471db2-8520-4a9a-a3f2-9ba15f3fd53a");
+
+        assertThrows(NoSuchScreeningException.class,
+                () -> screeningDao.getScreeningById(screeningId));
+    }
+
+    @Test
+    @Sql("/data/simpleScreeningsWithoutReservations.sql")
     public void getMovieScreeningsInDateRangeShouldReturnRightScreenings() {
         LocalDateTime start = LocalDateTime.parse("2023-04-05T14:20:00");
         LocalDateTime end = LocalDateTime.parse("2023-04-05T17:00:00");
@@ -46,5 +56,4 @@ class ScreeningDaoIT {
         screenings.forEach(screening ->
                 assertEquals(MOVIE_TITLE, screening.getMovie().title()));
     }
-
 }

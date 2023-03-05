@@ -29,6 +29,7 @@ public abstract class DomainToEntityMapper {
     public abstract ReservationEntity map(Reservation reservation);
 
     @Mapping(target = "price", source = "price.amount")
+    @Mapping(target = "currency", source = "price.currency")
     public abstract TicketTypeEntity map(TicketType ticketType);
 
     public abstract TicketEntity map(Ticket ticket);
